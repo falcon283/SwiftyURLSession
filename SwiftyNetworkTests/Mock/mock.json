@@ -1,0 +1,8 @@
+
+{
+    "value": "test1"
+    "array": ["value1", "value2"]
+    "dictionary": {
+        "value": "test2"
+    }
+}

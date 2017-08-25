@@ -8,23 +8,33 @@
 
 import Foundation
 
+
 public extension URLSession {
     
+    typealias StatusCode = Int
+    
     public enum HTTPRequestError: Error {
-        case invalidResponse
-        case response4xx
+        case unknownResponse
+        case invalidResponse(statusCode: Int)
         case emptyResponseData
-        case decodeError
+        case decodeError(rawData: Data)
     }
     
-    public func httpRequest(with request: URLRequest, completion: ((Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request) { (_, error) in
+    @discardableResult
+    public func httpRequest(with request: URLRequest,
+                            validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                            completion: ((Error?)->())?) -> URLSessionDataTask {
+        return startDataTaskRequest(request, validator: validator) { (_, error) in
             completion?(error)
         }
     }
     
-    public func httpRequest<R: Resource>(_ objectType: R.Type, with request: URLRequest, completion: ((R?, Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request) { (data, error) in
+    @discardableResult
+    public func httpRequest<R: Resource>(_ objectType: R.Type,
+                                         with request: URLRequest,
+                                         validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                         completion: ((R?, Error?)->())?) -> URLSessionDataTask {
+        return startDataTaskRequest(request, validator: validator) { (data, error) in
             
             // Skip Processing if not requested
             guard let _ = completion else {
@@ -41,9 +51,9 @@ public extension URLSession {
                 return
             }
             
-            if let contentType = request.accept {
-                guard let decoded = self.decodeData(data: data, to: objectType, for: contentType) else {
-                    completion?(nil, HTTPRequestError.decodeError)
+            if let _ = request.accept {
+                guard let decoded = objectType.decode(data: data) else {
+                    completion?(nil, HTTPRequestError.decodeError(rawData: data))
                     return
                 }
                 
@@ -55,8 +65,10 @@ public extension URLSession {
         }
     }
     
-    private func startDataTaskRequest(_ request: URLRequest, completion: @escaping (Data?, Error?)->()) -> URLSessionDataTask {
-        return dataTask(with: request) { (_, response, error) in
+    private func startDataTaskRequest(_ request: URLRequest,
+                                      validator: @escaping ((StatusCode)->(Bool)),
+                                      completion: @escaping (Data?, Error?)->()) -> URLSessionDataTask {
+        let task = dataTask(with: request) { (data, response, error) in
             
             guard error == nil else {
                 completion(nil, error!)
@@ -64,37 +76,35 @@ public extension URLSession {
             }
             
             guard let httpResponse = response as? HTTPURLResponse else {
-                completion(nil, HTTPRequestError.invalidResponse)
+                completion(nil, HTTPRequestError.unknownResponse)
                 return
             }
             
-            switch httpResponse.statusCode {
-            case 400...499:
-                completion(nil, HTTPRequestError.response4xx)
-            default:
-                completion(nil, nil)
+            if validator(httpResponse.statusCode) {
+                completion(data, nil)
+            }
+            else {
+                completion(nil, HTTPRequestError.invalidResponse(statusCode: httpResponse.statusCode))
             }
         }
+        
+        task.resume()
+        return task
+    }
+}
+
+extension URLSession {
+    
+    public static func validate200(_ statusCode: StatusCode) -> Bool {
+        return statusCode == 200
     }
     
-    private func decodeData<R: Resource>(data: Data, to type: R.Type, for contentType: URLRequest.ContentType) -> R? {
-        switch contentType {
-        case .graphql:
-            return nil
-        case .json:
-            do {
-                return try JSONDecoder().decode(type, from: data)
-            }
-            catch {
-                return nil
-            }
-        case .xml:
-            return nil
-        case .text:
-            return String(data: data, encoding: .utf8) as? R
-            
+    public static func validateExcept4XX(_ statusCode: StatusCode) -> Bool {
+        switch statusCode {
+        case 400...499:
+            return false
         default:
-            return nil
+            return true
         }
     }
 }

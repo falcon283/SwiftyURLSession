@@ -118,14 +118,107 @@ class URLRequestSpecs : QuickSpec {
                 }
             }
             
-            context("when using body") {
+            context("when body") {
                 
-                let body = BodyJSON(object: TestJSON(text: "Test"))
-                let request = try! URLRequest(for: TestResource.self, body: body)
+                context("is valid") {
+                    
+                    let body = MockBody(returnData: true, contentType: .json)
+                    let request = try! URLRequest(for: TestResource.self, body: body)
+                    
+                    it("should have valid httpBody") {
+                        expect(request.httpBody) == body.makeData()
+                        expect(request.allHTTPHeaderFields?["Content-Type"]) == "application/json"
+                    }
+                }
                 
-                it("should have valid httpBody") {
-                    expect(request.httpBody) == body.makeData()
-                    expect(request.allHTTPHeaderFields?["Content-Type"]) == "application/json"
+                context("binary is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .binary)
+                    
+                    it("should throw invalidBinary") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidBinary)))
+                    }
+                }
+                
+                context("graphql is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .graphql)
+                    
+                    it("should throw invalidGraphQL") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidGraphQL)))
+                    }
+                }
+                
+                context("jpeg is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .jpeg)
+                    
+                    it("should throw invalidJPEG") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidJPEG)))
+                    }
+                }
+                
+                context("json is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .json)
+                    
+                    it("should throw invalidJSON") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidJSON)))
+                    }
+                }
+                
+                context("png is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .png)
+                    
+                    it("should throw invalidPNG") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidPNG)))
+                    }
+                }
+                
+                context("pdf is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .pdf)
+                    
+                    it("should throw invalidPDF") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidPDF)))
+                    }
+                }
+                
+                context("string is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .text)
+                    
+                    it("should throw invalidString") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidString)))
+                    }
+                }
+                
+                context("xml is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .xml)
+                    
+                    it("should throw invalidXML") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidXML)))
+                    }
+                }
+                
+                context("zip is invalid") {
+                    
+                    let body = MockBody(returnData: false, contentType: .zip)
+                    
+                    it("should throw invalidZIP") {
+                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                            .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidZIP)))
+                    }
                 }
             }
             
@@ -140,15 +233,17 @@ class URLRequestSpecs : QuickSpec {
             
             context("when using overlapping headers") {
                 
-                let body = BodyJSON(object: TestJSON(text: "Test"))
+                let body = MockBody(returnData: true, contentType: .json)
+                let headers = ["Accept" : "application/jpg",
+                               "Content-Type" : "application/text",
+                               "Authentication" : "TestAuth",
+                               "test-header" : "test"]
+                
                 let request = try! URLRequest(for: TestResource.self,
                                               authentication: .oauth2(name: "oauth", secret: "secret"),
+                                              headers: headers,
                                               body: body,
-                                              accepting: .png,
-                                              headers: ["Accept" : "application/jpg",
-                                                        "Content-Type" : "application/text",
-                                                        "Authentication" : "TestAuth",
-                                                        "test-header" : "test"])
+                                              accepting: .png)
                 
                 it("should have header overriden") {
                     expect(request.allHTTPHeaderFields?["Accept"]) == "application/png"

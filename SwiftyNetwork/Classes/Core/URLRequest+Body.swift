@@ -76,7 +76,7 @@ public extension URLRequest {
         return allHTTPHeaderFields?["Content-Type"].flatMap { ContentType(rawValue: $0) }
     }
     
-    public enum EncodeError: Error {
+    public enum BodyEncodeError: Error {
         case invalidBinary
         case invalidGraphQL
         case invalidJPEG
@@ -87,7 +87,7 @@ public extension URLRequest {
         case invalidXML
         case invalidZIP
         
-        fileprivate static func from(contentType: ContentType) -> EncodeError {
+        fileprivate static func from(contentType: ContentType) -> BodyEncodeError {
             switch contentType {
             case .binary:
                 return .invalidBinary
@@ -114,7 +114,7 @@ public extension URLRequest {
     private mutating func setBody(_ body: Body) throws {
         
         guard let data = body.makeData() else {
-            throw EncodeError.from(contentType: body.contentType)
+            throw BodyEncodeError.from(contentType: body.contentType)
         }
         
         setHeader(key: "Content-Type", value: body.contentType.rawValue)
@@ -136,16 +136,16 @@ public extension URLRequest {
     
     public enum RequestError : Error {
         case invalidURL
-        case invalidBody(encodingError: EncodingError)
+        case invalidBody(encodeError: BodyEncodeError)
     }
     
     public init(for resource: Resource.Type,
                 authentication: Authentication = .none,
                 method: HTTPMethod = .get,
                 query: Query? = nil,
+                headers: [String : String]? = nil,
                 body: Body? = nil,
-                accepting: ContentType? = nil,
-                headers: [String : String]? = nil) throws {
+                accepting: ContentType? = nil) throws {
         
         guard let resourceUrl = resource.url else {
             throw RequestError.invalidURL
@@ -171,7 +171,7 @@ public extension URLRequest {
                 try self.setBody(body)
             }
             catch {
-                throw RequestError.invalidBody(encodingError: error as! EncodingError)
+                throw RequestError.invalidBody(encodeError: error as! BodyEncodeError)
             }
         }
         
