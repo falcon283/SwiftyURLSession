@@ -20,7 +20,28 @@ class ResourceSpecs: QuickSpec {
             context("when getting resource url") {
                 
                 it("should have valid url") {
-                    expect(TestResource.url) == URL(string: "http://fake.com/resource")
+                    expect(try! TestResource.url()) == URL(string: "http://fake.com/resource")
+                }
+            }
+            
+            context("when getting wrong url") {
+                
+                struct WrongResource : Resource {
+                    static var location: String {
+                        return ""
+                    }
+                    
+                    static var path: String {
+                        return ""
+                    }
+                    
+                    static func decode(data: Data) -> WrongResource? {
+                        return nil
+                    }
+                }
+                
+                it("should have valid url") {
+                    expect{ try WrongResource.url() }.to(throwError(URLRequest.RequestError.invalidURL))
                 }
             }
             

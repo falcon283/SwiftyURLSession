@@ -21,20 +21,19 @@ public extension URLSession {
     }
     
     @discardableResult
-    public func httpRequest(with request: URLRequest,
-                            validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
-                            completion: ((Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request, validator: validator) { (_, error) in
+    public func httpVoidRequest<R>(_ request: Request<R>,
+                                   validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                   completion: ((Error?)->())?) -> URLSessionDataTask {
+        return startDataTaskRequest(request.urlRequest, validator: validator) { (_, error) in
             completion?(error)
         }
     }
     
     @discardableResult
-    public func httpRequest<R: Resource>(_ objectType: R.Type,
-                                         with request: URLRequest,
-                                         validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
-                                         completion: ((R?, Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request, validator: validator) { (data, error) in
+    public func httpRequest<R>(_ request: Request<R>,
+                               validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                               completion: ((R?, Error?)->())?) -> URLSessionDataTask {
+        return startDataTaskRequest(request.urlRequest, validator: validator) { (data, error) in
             
             // Skip Processing if not requested
             guard let _ = completion else {
@@ -51,8 +50,8 @@ public extension URLSession {
                 return
             }
             
-            if let _ = request.accept {
-                guard let decoded = objectType.decode(data: data) else {
+            if let _ = request.urlRequest.accept {
+                guard let decoded = request.resourceType.decode(data: data) else {
                     completion?(nil, HTTPRequestError.decodeError(rawData: data))
                     return
                 }

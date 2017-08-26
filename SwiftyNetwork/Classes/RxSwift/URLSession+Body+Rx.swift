@@ -11,11 +11,11 @@ import RxSwift
 
 extension URLSession {
     
-    public func rx_httpRequest(with request: URLRequest) -> Observable<Void> {
+    public func rx_httpVoidRequest<R>(_ request: Request<R>) -> Observable<Void> {
         return Observable<Void>.create { observer -> Disposable in
-            
-            self.httpRequest(with: request, completion: { (error) in
-                
+
+            self.httpVoidRequest(request, completion: { error in
+
                 if let error = error {
                     observer.onError(error)
                 }
@@ -24,15 +24,15 @@ extension URLSession {
                     observer.onCompleted()
                 }
             })
-            
+
             return Disposables.create()
         }.backgroundTask(name: "\(#function)")
     }
     
-    public func rx_httpRequest<R: Resource>(_ objectType: R.Type, with request: URLRequest) -> Observable<R> {
+    public func rx_httpRequest<R>(_ request: Request<R>) -> Observable<R> {
         return Observable<R>.create({ observer -> Disposable in
             
-            self.httpRequest(objectType, with: request) { (resource, error) in
+            self.httpRequest(request) { resource, error in
                 if let error = error {
                     observer.onError(error)
                 }

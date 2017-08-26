@@ -26,11 +26,13 @@ post_install do |installer|
                 config.build_settings['SWIFT_VERSION'] = '3.2'
             end
         end
+        
         if target.name == "Quick"
             target.build_configurations.each do |config|
                 config.build_settings['SWIFT_VERSION'] = '3.2'
             end
         end
+        
         if target.name == "Nimble"
             target.build_configurations.each do |config|
                 config.build_settings['SWIFT_VERSION'] = '3.2'

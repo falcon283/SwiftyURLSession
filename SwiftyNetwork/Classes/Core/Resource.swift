@@ -20,7 +20,10 @@ public protocol Resource : Decodable {
 }
 
 extension Resource {
-    internal static var url: URL? {
-        return URL(string: location)?.appendingPathComponent(path)
+    internal static func url() throws -> URL {
+        guard let url = URL(string: location)?.appendingPathComponent(path) else {
+            throw URLRequest.RequestError.invalidURL
+        }
+        return url
     }
 }

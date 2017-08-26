@@ -20,11 +20,11 @@ class URLRequestSpecs : QuickSpec {
             
             context("when creating a simple request") {
                 
-                let request = try! URLRequest(for: TestResource.self)
+                let request = try! Request(for: TestResource.self)
                 
                 it("should have default parameters") {
-                    expect(request.httpMethod?.lowercased()) == "get"
-                    expect(request.allHTTPHeaderFields).to(beEmpty())
+                    expect(request.urlRequest.httpMethod?.lowercased()) == "get"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/json"
                 }
             }
             
@@ -34,7 +34,7 @@ class URLRequestSpecs : QuickSpec {
                     
                     let user = "user"
                     let password = "secret"
-                    let request = try! URLRequest(for: TestResource.self, authentication: .basic(username: user, password: password))
+                    let request = try! Request(for: TestResource.self, authentication: .basic(username: user, password: password))
     
                     it("should have Basic Authorization") {
                         
@@ -42,7 +42,7 @@ class URLRequestSpecs : QuickSpec {
                         let base64 = utf8?.base64EncodedString()
                         let secret = base64.flatMap { "Basic \($0)" }
                         
-                        expect(request.allHTTPHeaderFields?["Authentication"]) == secret
+                        expect(request.urlRequest.allHTTPHeaderFields?["Authentication"]) == secret
                     }
                 }
                 
@@ -50,11 +50,11 @@ class URLRequestSpecs : QuickSpec {
                     
                     let name = "Barer"
                     let secret = "secret"
-                    let request = try! URLRequest(for: TestResource.self, authentication: URLRequest.Authentication.oauth2(name: name, secret: secret))
+                    let request = try! Request(for: TestResource.self, authentication: URLRequest.Authentication.oauth2(name: name, secret: secret))
                     
                     it("should have OAuth Authorization") {
                         
-                        expect(request.allHTTPHeaderFields?["Authentication"]) == "\(name) \(secret)"
+                        expect(request.urlRequest.allHTTPHeaderFields?["Authentication"]) == "\(name) \(secret)"
                     }
                 }
             }
@@ -63,37 +63,37 @@ class URLRequestSpecs : QuickSpec {
                 
                 context("to post") {
                     
-                    let request = try! URLRequest(for: TestResource.self, method: .post)
+                    let request = try! Request(for: TestResource.self, method: .post)
                     
                     it("should have post method") {
-                        expect(request.httpMethod?.lowercased()) == "post"
+                        expect(request.urlRequest.httpMethod?.lowercased()) == "post"
                     }
                 }
                 
                 context("to put") {
                     
-                    let request = try! URLRequest(for: TestResource.self, method: .put)
+                    let request = try! Request(for: TestResource.self, method: .put)
                     
                     it("should have post method") {
-                        expect(request.httpMethod?.lowercased()) == "put"
+                        expect(request.urlRequest.httpMethod?.lowercased()) == "put"
                     }
                 }
                 
                 context("to patch") {
                     
-                    let request = try! URLRequest(for: TestResource.self, method: .patch)
+                    let request = try! Request(for: TestResource.self, method: .patch)
                     
                     it("should have post method") {
-                        expect(request.httpMethod?.lowercased()) == "patch"
+                        expect(request.urlRequest.httpMethod?.lowercased()) == "patch"
                     }
                 }
                 
                 context("to delete") {
                     
-                    let request = try! URLRequest(for: TestResource.self, method: .delete)
+                    let request = try! Request(for: TestResource.self, method: .delete)
                     
                     it("should have post method") {
-                        expect(request.httpMethod?.lowercased()) == "delete"
+                        expect(request.urlRequest.httpMethod?.lowercased()) == "delete"
                     }
                 }
             }
@@ -110,11 +110,11 @@ class URLRequestSpecs : QuickSpec {
                     }
                 }
                 
-                let request = try! URLRequest(for: TestResource.self, query: TestQuery(test1: true, test2: "Test", test3: 5))
+                let request = try! Request(for: TestResource.self, query: TestQuery(test1: true, test2: "Test", test3: 5))
                 
                 it("should have post method") {
-                    expect(request.url?.absoluteString) == "\(TestResource.url!)?test1=true&test2=Test&test3=5"
-                    expect(request.url?.query) == "test1=true&test2=Test&test3=5"
+                    expect(request.urlRequest.url?.absoluteString) == "\(try! TestResource.url())?test1=true&test2=Test&test3=5"
+                    expect(request.urlRequest.url?.query) == "test1=true&test2=Test&test3=5"
                 }
             }
             
@@ -123,11 +123,11 @@ class URLRequestSpecs : QuickSpec {
                 context("is valid") {
                     
                     let body = MockBody(returnData: true, contentType: .json)
-                    let request = try! URLRequest(for: TestResource.self, body: body)
+                    let request = try! Request(for: TestResource.self, body: body)
                     
                     it("should have valid httpBody") {
-                        expect(request.httpBody) == body.makeData()
-                        expect(request.allHTTPHeaderFields?["Content-Type"]) == "application/json"
+                        expect(request.urlRequest.httpBody) == body.makeData()
+                        expect(request.urlRequest.allHTTPHeaderFields?["Content-Type"]) == "application/json"
                     }
                 }
                 
@@ -136,7 +136,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .binary)
                     
                     it("should throw invalidBinary") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidBinary)))
                     }
                 }
@@ -146,7 +146,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .graphql)
                     
                     it("should throw invalidGraphQL") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidGraphQL)))
                     }
                 }
@@ -156,7 +156,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .jpeg)
                     
                     it("should throw invalidJPEG") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidJPEG)))
                     }
                 }
@@ -166,7 +166,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .json)
                     
                     it("should throw invalidJSON") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidJSON)))
                     }
                 }
@@ -176,7 +176,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .png)
                     
                     it("should throw invalidPNG") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidPNG)))
                     }
                 }
@@ -186,7 +186,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .pdf)
                     
                     it("should throw invalidPDF") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidPDF)))
                     }
                 }
@@ -196,7 +196,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .text)
                     
                     it("should throw invalidString") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidString)))
                     }
                 }
@@ -206,7 +206,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .xml)
                     
                     it("should throw invalidXML") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidXML)))
                     }
                 }
@@ -216,7 +216,7 @@ class URLRequestSpecs : QuickSpec {
                     let body = MockBody(returnData: false, contentType: .zip)
                     
                     it("should throw invalidZIP") {
-                        expect{ try URLRequest(for: TestResource.self, body: body) }
+                        expect{ try Request(for: TestResource.self, body: body) }
                             .to(throwError(URLRequest.RequestError.invalidBody(encodeError: .invalidZIP)))
                     }
                 }
@@ -224,10 +224,10 @@ class URLRequestSpecs : QuickSpec {
             
             context("when using headers") {
                 
-                let request = try! URLRequest(for: TestResource.self, headers: ["a" : "b"])
+                let request = try! Request(for: TestResource.self, headers: ["a" : "b"])
                 
                 it("should have valid accept header") {
-                    expect(request.allHTTPHeaderFields?["a"]) == "b"
+                    expect(request.urlRequest.allHTTPHeaderFields?["a"]) == "b"
                 }
             }
             
@@ -239,26 +239,17 @@ class URLRequestSpecs : QuickSpec {
                                "Authentication" : "TestAuth",
                                "test-header" : "test"]
                 
-                let request = try! URLRequest(for: TestResource.self,
+                let request = try! Request(for: TestResource.self,
                                               authentication: .oauth2(name: "oauth", secret: "secret"),
                                               headers: headers,
                                               body: body,
                                               accepting: .png)
                 
                 it("should have header overriden") {
-                    expect(request.allHTTPHeaderFields?["Accept"]) == "application/png"
-                    expect(request.allHTTPHeaderFields?["Content-Type"]) == "application/json"
-                    expect(request.allHTTPHeaderFields?["Authentication"]) == "oauth secret"
-                    expect(request.allHTTPHeaderFields?["test-header"]) == "test"
-                }
-            }
-            
-            context("when expecting data") {
-                
-                let request = try! URLRequest(for: TestResource.self, accepting: .json)
-                
-                it("should have valid accept header") {
-                    expect(request.allHTTPHeaderFields?["Accept"]) == "application/json"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/png"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Content-Type"]) == "application/json"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Authentication"]) == "oauth secret"
+                    expect(request.urlRequest.allHTTPHeaderFields?["test-header"]) == "test"
                 }
             }
         }

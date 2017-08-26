@@ -25,6 +25,8 @@
 		D5BDCC6B1F4E427100653CD4 /* ResourceSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BDCC6A1F4E427100653CD4 /* ResourceSpecs.swift */; };
 		D5BDCC6F1F4E44DB00653CD4 /* URLRequestSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BDCC6E1F4E44DB00653CD4 /* URLRequestSpecs.swift */; };
 		D5BDCC711F4E456600653CD4 /* MockData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5BDCC701F4E456600653CD4 /* MockData.swift */; };
+		D5E254A91F517E7D007CE371 /* RxBackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54B588B1F4E36CD00E8ACB4 /* RxBackgroundTask.swift */; };
+		D5E254AA1F517E7D007CE371 /* URLSession+Body+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = D54B588C1F4E36CD00E8ACB4 /* URLSession+Body+Rx.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -391,6 +393,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5E254AA1F517E7D007CE371 /* URLSession+Body+Rx.swift in Sources */,
+				D5E254A91F517E7D007CE371 /* RxBackgroundTask.swift in Sources */,
 				D54B58561F4E244B00E8ACB4 /* URLSession+Body.swift in Sources */,
 				D54B58551F4E244B00E8ACB4 /* URLRequest+Body.swift in Sources */,
 				D54B58531F4E244400E8ACB4 /* Resource.swift in Sources */,

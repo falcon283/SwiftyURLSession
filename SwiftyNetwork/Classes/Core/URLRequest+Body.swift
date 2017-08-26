@@ -8,6 +8,30 @@
 
 import Foundation
 
+public struct Request<R: Resource> {
+    
+    public let resourceType: R.Type
+    var urlRequest: URLRequest
+    
+    public init(for resource: R.Type,
+                authentication: URLRequest.Authentication = .none,
+                method: URLRequest.HTTPMethod = .get,
+                query: Query? = nil,
+                headers: [String : String]? = nil,
+                body: Body? = nil,
+                accepting: URLRequest.ContentType = .json) throws {
+    
+        resourceType = resource
+        urlRequest = try URLRequest(url: resource.url(),
+                                    authentication: authentication,
+                                    method: method,
+                                    query: query,
+                                    headers: headers,
+                                    body: body,
+                                    accepting: accepting)
+    }
+}
+
 public extension URLRequest {
     
     public enum HTTPMethod: String {
@@ -139,19 +163,15 @@ public extension URLRequest {
         case invalidBody(encodeError: BodyEncodeError)
     }
     
-    public init(for resource: Resource.Type,
-                authentication: Authentication = .none,
-                method: HTTPMethod = .get,
-                query: Query? = nil,
-                headers: [String : String]? = nil,
-                body: Body? = nil,
-                accepting: ContentType? = nil) throws {
+    fileprivate init(url: URL,
+                     authentication: Authentication = .none,
+                     method: HTTPMethod = .get,
+                     query: Query? = nil,
+                     headers: [String : String]? = nil,
+                     body: Body? = nil,
+                     accepting: ContentType = .json) throws {
         
-        guard let resourceUrl = resource.url else {
-            throw RequestError.invalidURL
-        }
-        
-        var urlComponent = URLComponents(url: resourceUrl, resolvingAgainstBaseURL: false)
+        var urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false)
         urlComponent?.queryItems = query?.parameters.map { name, value in URLQueryItem(name: name, value: value) }
         
         guard let fullUrl = urlComponent?.url else {

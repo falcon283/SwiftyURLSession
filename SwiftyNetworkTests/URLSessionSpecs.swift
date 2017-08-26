@@ -9,6 +9,7 @@
 import XCTest
 import Quick
 import Nimble
+import RxSwift
 
 @testable import SwiftyNetwork
 
@@ -16,17 +17,17 @@ class URLSessionSpecs : QuickSpec {
     
     override func spec() {
         
+        let session = URLSession.shared
+        
         describe("URLSessionSpecs") {
-            
-            let session = URLSession.shared
             
             context("when request does not expect response") {
                 
-                let request = try! URLRequest(for: Mock.self, query: MockQuery(test: true))
+                let request = try! Request(for: Mock.self, query: MockQuery(test: true))
                 var inError: Bool? = nil
                 
                 beforeEach {
-                    session.httpRequest(with: request) { error in
+                    session.httpVoidRequest(request) { error in
                         inError = error != nil ? true : false
                     }
                 }
@@ -38,34 +39,102 @@ class URLSessionSpecs : QuickSpec {
             
             context("when request expect response") {
                 
-                let request = try! URLRequest(for: Mock.self, accepting: .json)
+                let request = try! Request(for: Mock.self)
                 var mockResult: Mock? = nil
                 
                 beforeEach {
-                    session.httpRequest(Mock.self, with: request) { result, error in
+                    session.httpRequest(request) { result, error in
                         mockResult = result
                     }
                 }
                 
                 it("should have no error") {
                     expect(mockResult).toEventuallyNot(beNil())
-                    expect(mockResult!.url) == Mock.url?.absoluteString
+                    try! expect(mockResult!.url) == Mock.url().absoluteString
                 }
             }
             
             context("when request fail") {
                 
-                let request = try! URLRequest(for: MockError.self)
+                let request = try! Request(for: MockError.self)
                 var inError: Bool? = nil
                 
                 beforeEach {
-                    session.httpRequest(with: request) { error in
+                    session.httpVoidRequest(request) { error in
                         inError = error != nil ? true : false
                     }
                 }
                 
                 it("should have no error") {
                     expect(inError).toEventually(beTrue())
+                }
+            }
+        }
+        
+        describe("URLSessionRxSpecs") {
+            
+            let request = try! Request(for: Mock.self)
+            let errorRequest = try! Request(for: MockError.self)
+            
+            context("when object is not required") {
+                
+                context("and request succeed") {
+                    
+                    var success: Bool?
+                    
+                    beforeEach {
+                        _ = session.rx_httpVoidRequest(request)
+                            .subscribe(onNext: { _ in success = true })
+                    }
+                    
+                    it("should complete with no object") {
+                        expect(success).toEventually(beTrue())
+                    }
+                }
+                
+                context("and request fail") {
+                    
+                    var failure: Bool?
+                    
+                    beforeEach {
+                        _ = session.rx_httpVoidRequest(errorRequest)
+                            .subscribe(onError: { _ in failure = true })
+                    }
+                    
+                    it("should complete with no object") {
+                        expect(failure).toEventually(beTrue())
+                    }
+                }
+            }
+            
+            context("when object is required") {
+                
+                context("and request succeed") {
+                    
+                    var success: Bool?
+                    
+                    beforeEach {
+                        _ = session.rx_httpRequest(request)
+                            .subscribe(onNext: { _ in success = true })
+                    }
+                    
+                    it("should complete with no object") {
+                        expect(success).toEventually(beTrue())
+                    }
+                }
+                
+                context("and request fail") {
+                    
+                    var failure: Bool?
+                    
+                    beforeEach {
+                        _ = session.rx_httpRequest(errorRequest)
+                            .subscribe(onError: { _ in failure = true })
+                    }
+                    
+                    it("should complete with no object") {
+                        expect(failure).toEventually(beTrue())
+                    }
                 }
             }
         }
