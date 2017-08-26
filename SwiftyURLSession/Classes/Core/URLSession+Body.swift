@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 public extension URLSession {
     
     typealias StatusCode = Int

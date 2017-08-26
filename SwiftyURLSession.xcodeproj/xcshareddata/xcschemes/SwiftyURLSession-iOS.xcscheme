@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D551F7761F4E0B5400558961"
+               BlueprintIdentifier = "D568A2FA1F52454C0031FF44"
                BuildableName = "SwiftyURLSession.framework"
-               BlueprintName = "SwiftyURLSession"
+               BlueprintName = "SwiftyURLSession-iOS"
                ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,29 +27,9 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       language = ""
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES">
+      shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D551F77F1F4E0B5400558961"
-               BuildableName = "SwiftyURLSessionTests.xctest"
-               BlueprintName = "SwiftyURLSessionTests"
-               ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D551F7761F4E0B5400558961"
-            BuildableName = "SwiftyURLSession.framework"
-            BlueprintName = "SwiftyURLSession"
-            ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -67,9 +47,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D551F7761F4E0B5400558961"
+            BlueprintIdentifier = "D568A2FA1F52454C0031FF44"
             BuildableName = "SwiftyURLSession.framework"
-            BlueprintName = "SwiftyURLSession"
+            BlueprintName = "SwiftyURLSession-iOS"
             ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -85,9 +65,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D551F7761F4E0B5400558961"
+            BlueprintIdentifier = "D568A2FA1F52454C0031FF44"
             BuildableName = "SwiftyURLSession.framework"
-            BlueprintName = "SwiftyURLSession"
+            BlueprintName = "SwiftyURLSession-iOS"
             ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

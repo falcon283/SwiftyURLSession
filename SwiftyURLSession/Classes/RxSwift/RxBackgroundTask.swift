@@ -6,7 +6,7 @@
 //  Copyright © 2017 Gabriele Trabucco. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import RxSwift
 
 extension ObservableType {
