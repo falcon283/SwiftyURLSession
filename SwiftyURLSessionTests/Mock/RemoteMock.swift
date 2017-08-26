@@ -1,13 +1,13 @@
 //
 //  RemoteMock.swift
-//  SwiftyNetworkTests
+//  SwiftyURLSessionTests
 //
 //  Created by FaLcON2 on 25/08/2017.
 //  Copyright © 2017 Gabriele Trabucco. All rights reserved.
 //
 
 import Foundation
-import SwiftyNetwork
+import SwiftyURLSession
 
 struct Mock : Decodable {
     let args: [String: String]

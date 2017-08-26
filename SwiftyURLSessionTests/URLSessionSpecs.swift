@@ -1,6 +1,6 @@
 //
 //  URLSessionSpecs.swift
-//  SwiftyNetworkTests
+//  SwiftyURLSessionTests
 //
 //  Created by FaLcON2 on 25/08/2017.
 //  Copyright © 2017 Gabriele Trabucco. All rights reserved.
@@ -11,7 +11,7 @@ import Quick
 import Nimble
 import RxSwift
 
-@testable import SwiftyNetwork
+@testable import SwiftyURLSession
 
 class URLSessionSpecs : QuickSpec {
     

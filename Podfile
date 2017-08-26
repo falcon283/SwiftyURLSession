@@ -1,15 +1,15 @@
 # Uncomment the next line to define a global platform for your project
 platform :ios, '8.0'
 
-target 'SwiftyNetwork' do
+target 'SwiftyURLSession' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
   pod 'RxSwift'
 
-  # Pods for SwiftyNetwork
+  # Pods for SwiftyURLSession
 
-  target 'SwiftyNetworkTests' do
+  target 'SwiftyURLSessionTests' do
     inherit! :search_paths
     # Pods for testing
     pod 'Quick'

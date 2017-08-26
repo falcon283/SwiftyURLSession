@@ -1,6 +1,6 @@
 //
 //  URLRequestSpecs.swift
-//  SwiftyNetworkTests
+//  SwiftyURLSessionTests
 //
 //  Created by FaLcON2 on 24/08/2017.
 //  Copyright © 2017 Gabriele Trabucco. All rights reserved.
@@ -10,7 +10,7 @@ import XCTest
 import Quick
 import Nimble
 
-@testable import SwiftyNetwork
+@testable import SwiftyURLSession
 
 class URLRequestSpecs : QuickSpec {
     

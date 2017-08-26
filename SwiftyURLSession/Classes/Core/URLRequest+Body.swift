@@ -1,6 +1,6 @@
 //
 //  URLRequest+Body.swift
-//  SwiftyNetwork
+//  SwiftyURLSession
 //
 //  Created by FaLcON2 on 23/08/2017.
 //  Copyright © 2017 Gabriele Trabucco. All rights reserved.

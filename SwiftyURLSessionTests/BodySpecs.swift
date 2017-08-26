@@ -10,7 +10,7 @@ import XCTest
 import Quick
 import Nimble
 
-@testable import SwiftyNetwork
+@testable import SwiftyURLSession
 
 class BodySpecs: QuickSpec {
     
