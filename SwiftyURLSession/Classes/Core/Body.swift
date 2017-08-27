@@ -14,10 +14,10 @@ public protocol Body {
 }
 
 public struct BodyPdf {
-    let pdfData: Data?
+    private let pdfData: Data?
     
-    public init(pdfData: Data) {
-        self.pdfData = pdfData
+    public init(for pdf: Data) {
+        self.pdfData = pdf
     }
 }
 
@@ -33,11 +33,12 @@ extension BodyPdf : Body {
 
 public struct BodyJSON<T: Encodable> {
     
-    let object: T
-    public var encoder = JSONEncoder()
+    private let object: T
+    private var encoder: JSONEncoder
     
-    public init(object: T) {
+    public init(for object: T, with encoder: JSONEncoder) {
         self.object = object
+        self.encoder = encoder
     }
 }
 
@@ -56,8 +57,14 @@ extension BodyJSON : Body {
     }
 }
 
-public struct BodyXML<T: Encodable> {
-    let object: T
+public struct BodyXML<E: XMLEncoder> {
+    private let object: E.T
+    private let encoder: E
+    
+    public init(for object: E.T, with encoder: E) {
+        self.object = object
+        self.encoder = encoder
+    }
 }
 
 extension BodyXML : Body {
@@ -66,21 +73,27 @@ extension BodyXML : Body {
     }
     
     public func makeData() -> Data? {
-        // TODO
-        return nil
+        do {
+            return try encoder.encode(object)
+        } catch {
+            return nil
+        }
     }
 }
 
-public struct BodyGraphQL {
+public struct BodyGraphQL<E: GraphQLEncoder> {
     
-    enum GQLType {
-        case query
-        case mutation
+    private let object: E.T
+    private let query: GraphQLQueryType
+    private let variables: [String : String]
+    private let encoder: E
+    
+    public init(for object: E.T, query: GraphQLQueryType, variables: [String : String] = [:], with encoder: E) {
+        self.object = object
+        self.query = query
+        self.variables = variables
+        self.encoder = encoder
     }
-    
-    let type: GQLType
-    let values: [String : Any]
-    let variables: [[String: String]]
 }
 
 extension BodyGraphQL : Body {
@@ -89,14 +102,22 @@ extension BodyGraphQL : Body {
     }
     
     public func makeData() -> Data? {
-        // TODO
-        return nil
+        do {
+            return try encoder.encode(object, variables: variables, query: query)
+        } catch {
+            return nil
+        }
     }
 }
 
 public struct BodyEncodedString {
-    let encoding: String.Encoding
-    let string: String
+    private let encoding: String.Encoding
+    private let string: String
+    
+    public init(for string: String, in encoding: String.Encoding) {
+        self.string = string
+        self.encoding = encoding
+    }
 }
 
 extension BodyEncodedString : Body {

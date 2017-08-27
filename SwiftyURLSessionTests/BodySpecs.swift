@@ -57,7 +57,7 @@ class BodySpecs: QuickSpec {
             context("when testing pdf") {
                 let url = Bundle(for: BodySpecs.self).url(forResource: "blank", withExtension: "pdf")!
                 let data = try! Data(contentsOf: url)
-                let body = BodyPdf(pdfData: data)
+                let body = BodyPdf(for: data)
                 
                 it("should have valid data") {
                     expect(body.contentType) == URLRequest.ContentType.pdf
@@ -71,7 +71,7 @@ class BodySpecs: QuickSpec {
             context("when testing JSON") {
                 
                 let object = TestJSON(text: "Test")
-                let body = BodyJSON(object: object)
+                let body = BodyJSON(for: object, with: JSONEncoder())
                 
                 it("should have valid data") {
                     expect(body.contentType) == URLRequest.ContentType.json
@@ -104,7 +104,7 @@ class BodySpecs: QuickSpec {
             
             context("when testing EncodedString") {
                 
-                let body = BodyEncodedString(encoding: .utf8, string: "Test")
+                let body = BodyEncodedString(for: "Test", in: .utf8)
                 
                 it("should have valid data") {
                     expect(body.contentType) == URLRequest.ContentType.text

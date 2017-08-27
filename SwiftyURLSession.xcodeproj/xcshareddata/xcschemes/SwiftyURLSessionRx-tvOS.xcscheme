@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D558F8401F52D3B000580454"
-               BuildableName = "SwiftyURLSessionRx.framework"
+               BuildableName = "SwiftyURLSession.framework"
                BlueprintName = "SwiftyURLSessionRx-tvOS"
                ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
             </BuildableReference>
@@ -48,7 +48,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D558F8401F52D3B000580454"
-            BuildableName = "SwiftyURLSessionRx.framework"
+            BuildableName = "SwiftyURLSession.framework"
             BlueprintName = "SwiftyURLSessionRx-tvOS"
             ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
          </BuildableReference>
@@ -66,7 +66,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D558F8401F52D3B000580454"
-            BuildableName = "SwiftyURLSessionRx.framework"
+            BuildableName = "SwiftyURLSession.framework"
             BlueprintName = "SwiftyURLSessionRx-tvOS"
             ReferencedContainer = "container:SwiftyURLSession.xcodeproj">
          </BuildableReference>

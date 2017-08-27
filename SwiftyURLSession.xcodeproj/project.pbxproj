@@ -73,6 +73,24 @@
 		D5E254CF1F519F62007CE371 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254AF1F519F3A007CE371 /* Resource.swift */; };
 		D5E254D01F519F62007CE371 /* URLRequest+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254B01F519F3A007CE371 /* URLRequest+Body.swift */; };
 		D5E254D11F519F62007CE371 /* URLSession+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254B11F519F3A007CE371 /* URLSession+Body.swift */; };
+		D5F793741F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F793751F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F793761F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F793771F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F793781F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F793791F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F7937A1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F7937B1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F7937C1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
+		D5F7937E1F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F7937F1F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793801F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793811F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793821F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793831F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793841F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793851F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
+		D5F793861F53640300CB5FF8 /* GraphQLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */; };
 		E1661A998B2F97D287D9CD3B /* Pods_SwiftyURLSessionTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEF19F6746C1B4F6F3D20B51 /* Pods_SwiftyURLSessionTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -128,6 +146,8 @@
 		D5E254C11F519F3A007CE371 /* ResourceSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceSpecs.swift; sourceTree = "<group>"; };
 		D5E254C21F519F3A007CE371 /* URLRequestSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestSpecs.swift; sourceTree = "<group>"; };
 		D5E254C31F519F3A007CE371 /* URLSessionSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionSpecs.swift; sourceTree = "<group>"; };
+		D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLCodable.swift; sourceTree = "<group>"; };
+		D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLCodable.swift; sourceTree = "<group>"; };
 		EF171138E808F7B4E9D5B298 /* Pods-SwiftyURLSessionImp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftyURLSessionImp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftyURLSessionImp/Pods-SwiftyURLSessionImp.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -291,6 +311,8 @@
 				D5E254AE1F519F3A007CE371 /* Body.swift */,
 				D58769511F51A28100E060C8 /* BodyImage.swift */,
 				D5E254AF1F519F3A007CE371 /* Resource.swift */,
+				D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */,
+				D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */,
 				D5E254B01F519F3A007CE371 /* URLRequest+Body.swift */,
 				D5E254B11F519F3A007CE371 /* URLSession+Body.swift */,
 			);
@@ -803,6 +825,8 @@
 				D5E254CE1F519F62007CE371 /* Body.swift in Sources */,
 				D568A31F1F524C370031FF44 /* RxBackgroundTask.swift in Sources */,
 				D5E254CF1F519F62007CE371 /* Resource.swift in Sources */,
+				D5F793741F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
+				D5F7937E1F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D568A3201F524C370031FF44 /* URLSession+Body+Rx.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -824,10 +848,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F793811F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8331F52D3A800580454 /* Resource.swift in Sources */,
 				D558F8341F52D3A800580454 /* URLRequest+Body.swift in Sources */,
 				D558F8351F52D3A800580454 /* URLSession+Body.swift in Sources */,
 				D558F8361F52D3A800580454 /* Body.swift in Sources */,
+				D5F793771F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8371F52D3A800580454 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -836,11 +862,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F793821F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8421F52D3B000580454 /* Body.swift in Sources */,
 				D558F8431F52D3B000580454 /* URLSession+Body.swift in Sources */,
 				D558F8441F52D3B000580454 /* URLSession+Body+Rx.swift in Sources */,
 				D558F8461F52D3B000580454 /* URLRequest+Body.swift in Sources */,
 				D558F8471F52D3B000580454 /* Resource.swift in Sources */,
+				D5F793781F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8481F52D3B000580454 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -849,10 +877,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F793831F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8541F52D3C500580454 /* Resource.swift in Sources */,
 				D558F8551F52D3C500580454 /* URLRequest+Body.swift in Sources */,
 				D558F8561F52D3C500580454 /* URLSession+Body.swift in Sources */,
 				D558F8571F52D3C500580454 /* Body.swift in Sources */,
+				D5F793791F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8581F52D3C500580454 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,11 +891,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F793841F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8631F52D3CD00580454 /* Body.swift in Sources */,
 				D558F8641F52D3CD00580454 /* URLSession+Body.swift in Sources */,
 				D558F8651F52D3CD00580454 /* URLSession+Body+Rx.swift in Sources */,
 				D558F8671F52D3CD00580454 /* URLRequest+Body.swift in Sources */,
 				D558F8681F52D3CD00580454 /* Resource.swift in Sources */,
+				D5F7937A1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8691F52D3CD00580454 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -874,9 +906,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F7937B1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8751F52D3D400580454 /* Resource.swift in Sources */,
 				D558F8761F52D3D400580454 /* URLRequest+Body.swift in Sources */,
 				D558F8771F52D3D400580454 /* URLSession+Body.swift in Sources */,
+				D5F793851F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8781F52D3D400580454 /* Body.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -885,10 +919,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F793861F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D558F8841F52D3DB00580454 /* Body.swift in Sources */,
 				D558F8851F52D3DB00580454 /* URLSession+Body.swift in Sources */,
 				D558F8861F52D3DB00580454 /* URLSession+Body+Rx.swift in Sources */,
 				D558F8881F52D3DB00580454 /* URLRequest+Body.swift in Sources */,
+				D5F7937C1F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D558F8891F52D3DB00580454 /* Resource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -897,10 +933,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D5F7937F1F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D568A3121F5245B50031FF44 /* Resource.swift in Sources */,
 				D568A3131F5245B50031FF44 /* URLRequest+Body.swift in Sources */,
 				D568A3141F5245B50031FF44 /* URLSession+Body.swift in Sources */,
 				D568A3101F5245B50031FF44 /* Body.swift in Sources */,
+				D5F793751F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
 				D568A3111F5245B50031FF44 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -915,6 +953,8 @@
 				D568A3151F5245C30031FF44 /* RxBackgroundTask.swift in Sources */,
 				D568A31D1F524C310031FF44 /* URLRequest+Body.swift in Sources */,
 				D568A31C1F524C310031FF44 /* Resource.swift in Sources */,
+				D5F793761F5363EB00CB5FF8 /* XMLCodable.swift in Sources */,
+				D5F793801F53640300CB5FF8 /* GraphQLCodable.swift in Sources */,
 				D568A31B1F524C310031FF44 /* BodyImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
