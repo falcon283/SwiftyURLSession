@@ -10,7 +10,7 @@ import XCTest
 import Quick
 import Nimble
 
-@testable import SwiftyURLSession
+@testable import SwiftyURLSessionImp
 
 class URLRequestSpecs : QuickSpec {
     
@@ -24,6 +24,27 @@ class URLRequestSpecs : QuickSpec {
                 
                 it("should have default parameters") {
                     expect(request.urlRequest.httpMethod?.lowercased()) == "get"
+                }
+
+                it("should have Accept header") {
+                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/json"
+                }
+            }
+            
+            context("when return data is not needed") {
+                
+                let request = try! Request(for: TestResource.self, parseData: false)
+                
+                it("should have Accept header") {
+                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]).to(beNil())
+                }
+            }
+            
+            context("when expecting return data") {
+                
+                let request = try! Request(for: TestResource.self)
+                
+                it("should have Accept header") {
                     expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/json"
                 }
             }
@@ -233,7 +254,7 @@ class URLRequestSpecs : QuickSpec {
             
             context("when using overlapping headers") {
                 
-                let body = MockBody(returnData: true, contentType: .json)
+                let body = MockBody(returnData: true, contentType: .xml)
                 let headers = ["Accept" : "application/jpg",
                                "Content-Type" : "application/text",
                                "Authentication" : "TestAuth",
@@ -242,12 +263,11 @@ class URLRequestSpecs : QuickSpec {
                 let request = try! Request(for: TestResource.self,
                                               authentication: .oauth2(name: "oauth", secret: "secret"),
                                               headers: headers,
-                                              body: body,
-                                              accepting: .png)
+                                              body: body)
                 
                 it("should have header overriden") {
-                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/png"
-                    expect(request.urlRequest.allHTTPHeaderFields?["Content-Type"]) == "application/json"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Accept"]) == "application/json"
+                    expect(request.urlRequest.allHTTPHeaderFields?["Content-Type"]) == "application/xml"
                     expect(request.urlRequest.allHTTPHeaderFields?["Authentication"]) == "oauth secret"
                     expect(request.urlRequest.allHTTPHeaderFields?["test-header"]) == "test"
                 }

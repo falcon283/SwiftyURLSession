@@ -11,13 +11,16 @@ import UIKit
 public enum BodyImage {
     case jpeg(image: UIImage, compression: CGFloat)
     case png(image: UIImage)
-    
+    case binary(data: Data, contentType: URLRequest.ContentType)
+
     var rawImage: Data? {
         switch self {
         case let .jpeg(image, compression):
             return UIImageJPEGRepresentation(image, compression)
         case let .png(image):
             return UIImagePNGRepresentation(image)
+        case let .binary(data: data, contentType: _):
+            return data
         }
     }
 }
@@ -29,6 +32,8 @@ extension BodyImage : Body {
             return .jpeg
         case .png(image: _):
             return .png
+        case let .binary(data: _, contentType: contentType):
+            return contentType
         }
     }
     

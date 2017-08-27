@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SwiftyURLSession
+import SwiftyURLSessionImp
 
 struct Mock : Decodable {
     let args: [String: String]
@@ -32,6 +32,10 @@ extension Mock : Resource {
         return "get"
     }
     
+    static var acceptedContentType: URLRequest.ContentType {
+        return .json
+    }
+    
     static func decode(data: Data) -> Mock? {
         do {
             return try JSONDecoder().decode(Mock.self, from: data)
@@ -50,6 +54,10 @@ extension MockError : Resource {
     }
     static var path: String {
         return "error"
+    }
+    
+    static var acceptedContentType: URLRequest.ContentType {
+        return .json
     }
     
     static func decode(data: Data) -> MockError? {

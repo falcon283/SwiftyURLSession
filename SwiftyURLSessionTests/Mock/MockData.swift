@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import SwiftyURLSession
+import SwiftyURLSessionImp
 
 struct TestResource : Resource {
     
@@ -19,6 +19,10 @@ struct TestResource : Resource {
     
     static var path: String {
         return "resource"
+    }
+    
+    static var acceptedContentType: URLRequest.ContentType {
+        return .json
     }
     
     static func decode(data: Data) -> TestResource? {

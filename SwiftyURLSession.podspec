@@ -1,5 +1,5 @@
 #
-#  Be sure to run `pod spec lint SwiftyNetwork.podspec' to ensure this is a
+#  Be sure to run `pod spec lint SwiftyURLSession.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
 #  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html
@@ -15,9 +15,9 @@ Pod::Spec.new do |s|
   #  summary should be tweet-length, and the description more in depth.
   #
 
-  s.name         = "SwiftyNetwork"
+  s.name         = "SwiftyURLSession"
   s.version      = "0.9.0"
-  s.summary      = "A short description of SwiftyNetwork."
+  s.summary      = "A short description of SwiftyURLSession."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
                     TODO
                    DESC
 
-  s.homepage     = "http://EXAMPLE/SwiftyNetwork"
+  s.homepage     = "http://github.com/falcon283/SwiftyURLSession"
 
 
   # ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -63,6 +63,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = "8.0"
   s.watchos.deployment_target = "1.0"
   s.tvos.deployment_target = "9.0"
+  s.osx.deployment_target = "10.11"
 
 
   # ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -71,7 +72,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "http://github.com/falcon283/SwiftyNetwork.git", :tag => "#{s.version}" }
+  s.source       = { :git => "http://github.com/falcon283/SwiftyURLSession.git", :tag => "#{s.version}" }
 
 
 
@@ -83,18 +84,27 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "SwiftyNetwork/Classes/Core", "SwiftyNetwork/Classes/Core/*.{h,m,swift}"
-  s.exclude_files = "SwiftyNetwork/Classes/Exclude"
+  s.ios.source_files = "SwiftyURLSession/Classes/Core/*.{h,m,swift}"
+
+  s.tvos.source_files = "SwiftyURLSession/Classes/Core/*.{h,m,swift}"
+
+  s.watchos.source_files = "SwiftyURLSession/Classes/Core/*.{h,m,swift}"
+
+  s.osx.source_files  = "SwiftyURLSession/Classes/Core/*.{h,m,swift}"
+  s.osx.exclude_files = 'SwiftyURLSession/Classes/Core/BodyImage.swift'
 
   # ――― Subspec -----――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
 
-  s.subspec 'RxSwift' do |srxs|
+  s.subspec 'Rx' do |srxs|
 
     # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
     #
 
-    srxs.source_files = "SwiftyNetwork/Classes/RxSwift/*.{h,m,swift}"
+    srxs.ios.source_files = "SwiftyURLSession/Classes/RxSwift/*.{h,m,swift}"
+    srxs.tvos.source_files = "SwiftyURLSession/Classes/RxSwift/URLSession+Body+Rx.swift"
+    srxs.watchos.source_files = "SwiftyURLSession/Classes/RxSwift/URLSession+Body+Rx.swift"
+    srxs.osx.source_files = "SwiftyURLSession/Classes/RxSwift/URLSession+Body+Rx.swift"
 
     # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
     #

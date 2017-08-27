@@ -10,7 +10,7 @@ import XCTest
 import Quick
 import Nimble
 
-@testable import SwiftyURLSession
+@testable import SwiftyURLSessionImp
 
 class ResourceSpecs: QuickSpec {
     
@@ -33,6 +33,10 @@ class ResourceSpecs: QuickSpec {
                     
                     static var path: String {
                         return ""
+                    }
+                    
+                    static var acceptedContentType: URLRequest.ContentType {
+                        return .json
                     }
                     
                     static func decode(data: Data) -> WrongResource? {

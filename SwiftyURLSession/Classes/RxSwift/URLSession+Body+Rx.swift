@@ -11,38 +11,26 @@ import RxSwift
 
 extension URLSession {
     
-    public func rx_httpVoidRequest<R>(_ request: Request<R>) -> Observable<Void> {
-        return Observable<Void>.create { observer -> Disposable in
-
-            self.httpVoidRequest(request, completion: { error in
-
-                if let error = error {
-                    observer.onError(error)
-                }
-                else {
-                    observer.onNext(())
-                    observer.onCompleted()
-                }
-            })
-
-            return Disposables.create()
-        }.backgroundTask(name: "\(#function)")
-    }
-    
-    public func rx_httpRequest<R>(_ request: Request<R>) -> Observable<R> {
-        return Observable<R>.create({ observer -> Disposable in
+    public func rx_httpRequest<R>(_ request: Request<R>) -> Observable<R?> {
+        let observable = Observable<R?>.create({ observer -> Disposable in
             
             self.httpRequest(request) { resource, error in
                 if let error = error {
                     observer.onError(error)
                 }
                 else {
-                    observer.onNext(resource!)
+                    observer.onNext(resource)
                     observer.onCompleted()
                 }
             }
             
             return Disposables.create()
-        }).backgroundTask(name: "\(#function)")
+        })
+        
+        #if os(iOS)
+            return observable.beginBackgroundTask(name: "\(#function)")
+        #else
+            return observable
+        #endif
     }
 }

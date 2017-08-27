@@ -16,6 +16,7 @@ public protocol Resource : Decodable {
     static var location: String { get }
     static var path: String { get }
     
+    static var acceptedContentType: URLRequest.ContentType { get }
     static func decode(data: Data) -> Self?
 }
 

@@ -19,7 +19,7 @@ public struct Request<R: Resource> {
                 query: Query? = nil,
                 headers: [String : String]? = nil,
                 body: Body? = nil,
-                accepting: URLRequest.ContentType = .json) throws {
+                parseData: Bool = true) throws {
     
         resourceType = resource
         urlRequest = try URLRequest(url: resource.url(),
@@ -28,7 +28,7 @@ public struct Request<R: Resource> {
                                     query: query,
                                     headers: headers,
                                     body: body,
-                                    accepting: accepting)
+                                    expecting: parseData ? resource.acceptedContentType : nil)
     }
 }
 
@@ -87,17 +87,13 @@ public extension URLRequest {
         // TODO: Multipart
     }
     
-    internal var accept: ContentType? {
+    internal var resultType: ContentType? {
         get {
             return allHTTPHeaderFields?["Accept"].flatMap { ContentType(rawValue: $0) }
         }
         set {
             setHeader(key: "Accept", value: newValue?.rawValue)
         }
-    }
-    
-    private var contentType: ContentType? {
-        return allHTTPHeaderFields?["Content-Type"].flatMap { ContentType(rawValue: $0) }
     }
     
     public enum BodyEncodeError: Error {
@@ -169,7 +165,7 @@ public extension URLRequest {
                      query: Query? = nil,
                      headers: [String : String]? = nil,
                      body: Body? = nil,
-                     accepting: ContentType = .json) throws {
+                     expecting: ContentType? = nil) throws {
         
         var urlComponent = URLComponents(url: url, resolvingAgainstBaseURL: false)
         urlComponent?.queryItems = query?.parameters.map { name, value in URLQueryItem(name: name, value: value) }
@@ -195,6 +191,6 @@ public extension URLRequest {
             }
         }
         
-        self.accept = accepting
+        self.resultType = expecting
     }
 }

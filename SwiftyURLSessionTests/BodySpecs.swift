@@ -10,7 +10,7 @@ import XCTest
 import Quick
 import Nimble
 
-@testable import SwiftyURLSession
+@testable import SwiftyURLSessionImp
 
 class BodySpecs: QuickSpec {
     
@@ -36,6 +36,17 @@ class BodySpecs: QuickSpec {
                 
                 it("should have valid data") {
                     expect(body.contentType) == URLRequest.ContentType.png
+                    expect(body.makeData()).toNot(beNil())
+                }
+            }
+            
+            context("when testing binary") {
+                let url = Bundle(for: BodySpecs.self).url(forResource: "kittenjpg", withExtension: "jpg")!
+                let data = try! Data(contentsOf: url)
+                let body = BodyImage.binary(data: data, contentType: .jpeg)
+                
+                it("should have valid data") {
+                    expect(body.contentType) == URLRequest.ContentType.jpeg
                     expect(body.makeData()).toNot(beNil())
                 }
             }

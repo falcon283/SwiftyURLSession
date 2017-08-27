@@ -10,7 +10,8 @@ import UIKit
 import RxSwift
 
 extension ObservableType {
-    public func backgroundTask(name: String? = nil, expirationHandler: (()->())? = nil) -> RxSwift.Observable<Self.E> {
+    
+    public func beginBackgroundTask(name: String? = nil, expirationHandler: (()->())? = nil) -> RxSwift.Observable<Self.E> {
         let taskId = UIApplication.shared.beginBackgroundTask(withName: name, expirationHandler: expirationHandler)
         return asObservable().do(onCompleted: { UIApplication.shared.endBackgroundTask(taskId) })
     }

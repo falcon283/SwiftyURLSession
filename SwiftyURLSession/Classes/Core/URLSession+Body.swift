@@ -18,16 +18,7 @@ public extension URLSession {
         case emptyResponseData
         case decodeError(rawData: Data)
     }
-    
-    @discardableResult
-    public func httpVoidRequest<R>(_ request: Request<R>,
-                                   validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
-                                   completion: ((Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request.urlRequest, validator: validator) { (_, error) in
-            completion?(error)
-        }
-    }
-    
+        
     @discardableResult
     public func httpRequest<R>(_ request: Request<R>,
                                validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
@@ -44,12 +35,13 @@ public extension URLSession {
                 return
             }
             
-            guard let data = data else {
-                completion?(nil, HTTPRequestError.emptyResponseData)
-                return
-            }
-            
-            if let _ = request.urlRequest.accept {
+            if let _ = request.urlRequest.resultType {
+                
+                guard let data = data else {
+                    completion?(nil, HTTPRequestError.emptyResponseData)
+                    return
+                }
+                
                 guard let decoded = request.resourceType.decode(data: data) else {
                     completion?(nil, HTTPRequestError.decodeError(rawData: data))
                     return
