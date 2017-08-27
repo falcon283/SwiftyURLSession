@@ -27,7 +27,7 @@ class URLSessionSpecs : QuickSpec {
                 var mockResult: Mock? = nil
                 
                 beforeEach {
-                    session.httpRequest(request) { result, _ in
+                    session.dataRequest(request) { result, _ in
                         mockResult = result
                     }
                 }
@@ -44,7 +44,7 @@ class URLSessionSpecs : QuickSpec {
                 var success: Bool? = nil
                 
                 beforeEach {
-                    session.httpRequest(request) { response, _ in
+                    session.dataRequest(request) { response, _ in
                         success = response == nil ? true : false
                     }
                 }
@@ -60,7 +60,7 @@ class URLSessionSpecs : QuickSpec {
                 var inError: Bool? = nil
                 
                 beforeEach {
-                    session.httpRequest(request) { _, error in
+                    session.dataRequest(request) { _, error in
                         inError = error != nil ? true : false
                     }
                 }
@@ -83,7 +83,8 @@ class URLSessionSpecs : QuickSpec {
                     var object: Mock? = nil
                     
                     beforeEach {
-                        _ = session.rx_httpRequest(request)
+                        _ = session.rxDataRequest(request)
+                            .map { $0.result }
                             .subscribe(onNext: { object = $0 })
                     }
                     
@@ -97,7 +98,7 @@ class URLSessionSpecs : QuickSpec {
                     var failure: Bool?
                     
                     beforeEach {
-                        _ = session.rx_httpRequest(errorRequest)
+                        _ = session.rxDataRequest(errorRequest)
                             .subscribe(onError: { _ in failure = true })
                     }
                     
@@ -117,7 +118,8 @@ class URLSessionSpecs : QuickSpec {
                     var success: Bool? = nil
                     
                     beforeEach {
-                        _ = session.rx_httpRequest(request)
+                        _ = session.rxDataRequest(request)
+                            .map { $0.result }
                             .subscribe(onNext: { success = $0 == nil ? true : false })
                     }
                     
@@ -131,7 +133,7 @@ class URLSessionSpecs : QuickSpec {
                     var failure: Bool? = nil
                     
                     beforeEach {
-                        _ = session.rx_httpRequest(errorRequest)
+                        _ = session.rxDataRequest(errorRequest)
                             .subscribe(onError: { _ in failure = true })
                     }
                     

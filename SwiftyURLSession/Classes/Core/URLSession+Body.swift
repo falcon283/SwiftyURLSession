@@ -18,47 +18,75 @@ public extension URLSession {
         case emptyResponseData
         case decodeError(rawData: Data)
     }
-        
+    
     @discardableResult
-    public func httpRequest<R>(_ request: Request<R>,
+    public func dataRequest<R>(_ request: Request<R>,
+                               startNow: Bool = true,
                                validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
                                completion: ((R?, Error?)->())?) -> URLSessionDataTask {
-        return startDataTaskRequest(request.urlRequest, validator: validator) { (data, error) in
+        return dataTaskRequest(request.urlRequest, validator: validator) {
+            self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
+        }.resumed(startNow)
+    }
+    
+    @discardableResult
+    public func uploadRequest<R>(_ request: Request<R>,
+                                 data: Data,
+                                 startNow: Bool = true,
+                                 validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                 completion: ((R?, Error?)->())?) -> URLSessionUploadTask {
+        
+        return uploadTaskRequest(request.urlRequest, data: data, validator: validator) {
+            self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
+        }.resumed(startNow)
+    }
+    
+    @discardableResult
+    public func downloadRequest<R>(_ request: Request<R>,
+                                   resumeData: Data?,
+                                   startNow: Bool = true,
+                                   validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                   completion: ((R?, Error?)->())?) -> URLSessionDownloadTask {
+        
+        return downloadTaskRequest(request.urlRequest, resumeData: resumeData, validator: validator) {
+            self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
+        }.resumed(startNow)
+    }
+    
+    private func finalizeTask<R>(for request: Request<R>, with data: Data?, error: Error?, completion: ((R?, Error?)->())?) {
+        // Skip Processing if not requested
+        guard let _ = completion else {
+            return
+        }
+        
+        guard error == nil else {
+            completion?(nil, error!)
+            return
+        }
+        
+        if let _ = request.urlRequest.resultType {
             
-            // Skip Processing if not requested
-            guard let _ = completion else {
+            guard let data = data else {
+                completion?(nil, HTTPRequestError.emptyResponseData)
                 return
             }
             
-            guard error == nil else {
-                completion?(nil, error!)
+            guard let decoded = request.resourceType.decode(data: data) else {
+                completion?(nil, HTTPRequestError.decodeError(rawData: data))
                 return
             }
             
-            if let _ = request.urlRequest.resultType {
-                
-                guard let data = data else {
-                    completion?(nil, HTTPRequestError.emptyResponseData)
-                    return
-                }
-                
-                guard let decoded = request.resourceType.decode(data: data) else {
-                    completion?(nil, HTTPRequestError.decodeError(rawData: data))
-                    return
-                }
-                
-                completion?(decoded, nil)
-            }
-            else {
-                completion?(nil, nil)
-            }
+            completion?(decoded, nil)
+        }
+        else {
+            completion?(nil, nil)
         }
     }
     
-    private func startDataTaskRequest(_ request: URLRequest,
-                                      validator: @escaping ((StatusCode)->(Bool)),
-                                      completion: @escaping (Data?, Error?)->()) -> URLSessionDataTask {
-        let task = dataTask(with: request) { (data, response, error) in
+    private func dataTaskRequest(_ request: URLRequest,
+                                 validator: @escaping ((StatusCode)->(Bool)),
+                                 completion: @escaping (Data?, Error?)->()) -> URLSessionDataTask {
+        return dataTask(with: request) { (data, response, error) in
             
             guard error == nil else {
                 completion(nil, error!)
@@ -77,9 +105,76 @@ public extension URLSession {
                 completion(nil, HTTPRequestError.invalidResponse(statusCode: httpResponse.statusCode))
             }
         }
+    }
+    
+    private func uploadTaskRequest(_ request: URLRequest,
+                                   data: Data,
+                                   validator: @escaping ((StatusCode)->(Bool)),
+                                   completion: @escaping (Data?, Error?)->()) -> URLSessionUploadTask {
         
-        task.resume()
-        return task
+        return uploadTask(with: request, from: data) { (data, response, error) in
+            
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, HTTPRequestError.unknownResponse)
+                return
+            }
+            
+            if validator(httpResponse.statusCode) {
+                completion(data, nil)
+            }
+            else {
+                completion(nil, HTTPRequestError.invalidResponse(statusCode: httpResponse.statusCode))
+            }
+        }
+    }
+    
+    private func downloadTaskRequest(_ request: URLRequest,
+                                     resumeData: Data? = nil,
+                                     validator: @escaping ((StatusCode)->(Bool)),
+                                     completion: @escaping (Data?, Error?)->()) -> URLSessionDownloadTask {
+        
+        func produceData(url: URL?, response: URLResponse?, error: Error?) {
+            guard error == nil else {
+                completion(nil, error!)
+                return
+            }
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                completion(nil, HTTPRequestError.unknownResponse)
+                return
+            }
+            
+            guard let url = url else {
+                completion(nil, HTTPRequestError.emptyResponseData)
+                return
+            }
+            
+            do {
+                if validator(httpResponse.statusCode)  {
+                    
+                    let data = try Data(contentsOf: url)
+                    completion(data, nil)
+                }
+                else {
+                    completion(nil, HTTPRequestError.invalidResponse(statusCode: httpResponse.statusCode))
+                }
+            }
+            catch {
+                completion(nil, HTTPRequestError.emptyResponseData)
+            }
+        }
+        
+        if let resumeData = resumeData {
+            return downloadTask(withResumeData: resumeData, completionHandler: produceData)
+        }
+        else {
+            return downloadTask(with: request, completionHandler: produceData)
+        }
     }
 }
 
@@ -98,3 +193,15 @@ extension URLSession {
         }
     }
 }
+
+extension URLSessionTask {
+    
+    @discardableResult
+    func resumed(_ resumed: Bool = false) -> Self {
+        if resumed {
+            resume()
+        }
+        return self
+    }
+}
+
