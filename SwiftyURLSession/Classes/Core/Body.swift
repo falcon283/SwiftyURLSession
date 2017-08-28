@@ -75,7 +75,8 @@ extension BodyXML : Body {
     public func makeData() -> Data? {
         do {
             return try encoder.encode(object)
-        } catch {
+        }
+        catch {
             return nil
         }
     }
@@ -104,7 +105,8 @@ extension BodyGraphQL : Body {
     public func makeData() -> Data? {
         do {
             return try encoder.encode(object, variables: variables, query: query)
-        } catch {
+        }
+        catch {
             return nil
         }
     }

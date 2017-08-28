@@ -70,7 +70,7 @@ class BodySpecs: QuickSpec {
             
             context("when testing JSON") {
                 
-                let object = TestJSON(text: "Test")
+                let object = TestCodable(text: "Test")
                 let body = BodyJSON(for: object, with: JSONEncoder())
                 
                 it("should have valid data") {
@@ -80,22 +80,56 @@ class BodySpecs: QuickSpec {
             }
         }
         
-        describe("BodyXML") {
+        describe("BodyGraphQL") {
             
-            context("when testing XML") {
+            context("when GraphQL is encodable") {
+                
+                let object = TestCodable(text: "Test")
+                let encoder = GraphQLInLineEncoder<TestCodable>({ (_, _, _) in Data() })
+                let body = BodyGraphQL<GraphQLInLineEncoder<TestCodable>>(for: object, query: .query, with: encoder)
                 
                 it("should have valid data") {
-                    // TODO
+                    expect(body.contentType) == URLRequest.ContentType.graphql
+                    expect(body.makeData()).toNot(beNil())
+                }
+            }
+            
+            context("when GraphQL is not encodable") {
+                
+                let object = TestCodable(text: "Test")
+                let encoder = GraphQLInLineEncoder<TestCodable>({ (_, _, _) in nil })
+                let body = BodyGraphQL<GraphQLInLineEncoder<TestCodable>>(for: object, query: .query, with: encoder)
+                
+                it("should have valid data") {
+                    expect(body.contentType) == URLRequest.ContentType.graphql
+                    expect(body.makeData()).to(beNil())
                 }
             }
         }
         
-        describe("BodyGraphQL") {
+        describe("BodyXML") {
             
-            context("when testing GraphQL") {
+            context("when XML is encodable") {
+                
+                let object = TestCodable(text: "Test")
+                let encoder = XMLInLineEncoder<TestCodable>({ (_) in Data() })
+                let body = BodyXML<XMLInLineEncoder<TestCodable>>(for: object, with: encoder)
                 
                 it("should have valid data") {
-                    // TODO
+                    expect(body.contentType) == URLRequest.ContentType.xml
+                    expect(body.makeData()).toNot(beNil())
+                }
+            }
+            
+            context("when XML is not encodable") {
+                
+                let object = TestCodable(text: "Test")
+                let encoder = XMLInLineEncoder<TestCodable>({ (_) in nil })
+                let body = BodyXML<XMLInLineEncoder<TestCodable>>(for: object, with: encoder)
+                
+                it("should have valid data") {
+                    expect(body.contentType) == URLRequest.ContentType.xml
+                    expect(body.makeData()).to(beNil())
                 }
             }
         }

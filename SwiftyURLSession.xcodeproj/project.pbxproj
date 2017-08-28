@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4D74F2697CE388FE80B31461 /* Pods_SwiftyURLSessionImp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AB1FEE44AFD5B20F756BCE82 /* Pods_SwiftyURLSessionImp.framework */; };
+		D52FF4131F5388E100C04E26 /* XMLCodableSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52FF4121F5388E100C04E26 /* XMLCodableSpecs.swift */; };
 		D551F7811F4E0B5400558961 /* SwiftyURLSessionImp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D551F7771F4E0B5400558961 /* SwiftyURLSessionImp.framework */; };
 		D558F8331F52D3A800580454 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254AF1F519F3A007CE371 /* Resource.swift */; };
 		D558F8341F52D3A800580454 /* URLRequest+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254B01F519F3A007CE371 /* URLRequest+Body.swift */; };
@@ -73,6 +74,8 @@
 		D5E254CF1F519F62007CE371 /* Resource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254AF1F519F3A007CE371 /* Resource.swift */; };
 		D5E254D01F519F62007CE371 /* URLRequest+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254B01F519F3A007CE371 /* URLRequest+Body.swift */; };
 		D5E254D11F519F62007CE371 /* URLSession+Body.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E254B11F519F3A007CE371 /* URLSession+Body.swift */; };
+		D5F2F6E61F538CA000688B57 /* GraphQLCodableSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F2F6E51F538CA000688B57 /* GraphQLCodableSpecs.swift */; };
+		D5F2F6E81F5390F600688B57 /* URLSessionRxSpecs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F2F6E71F5390F600688B57 /* URLSessionRxSpecs.swift */; };
 		D5F793741F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
 		D5F793751F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
 		D5F793761F5363EB00CB5FF8 /* XMLCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */; };
@@ -113,6 +116,7 @@
 		ABDE2AD7D3BCF9116B8A6176 /* Pods-SwiftyURLSessionTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftyURLSessionTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftyURLSessionTests/Pods-SwiftyURLSessionTests.release.xcconfig"; sourceTree = "<group>"; };
 		CEF19F6746C1B4F6F3D20B51 /* Pods_SwiftyURLSessionTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftyURLSessionTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D51AA8861F52DCAF002F9C7F /* SwiftyURLSession.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SwiftyURLSession.podspec; sourceTree = SOURCE_ROOT; };
+		D52FF4121F5388E100C04E26 /* XMLCodableSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLCodableSpecs.swift; sourceTree = "<group>"; };
 		D551F7771F4E0B5400558961 /* SwiftyURLSessionImp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyURLSessionImp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D551F7801F4E0B5400558961 /* SwiftyURLSessionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyURLSessionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D558F83E1F52D3A800580454 /* SwiftyURLSession.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyURLSession.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +150,8 @@
 		D5E254C11F519F3A007CE371 /* ResourceSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceSpecs.swift; sourceTree = "<group>"; };
 		D5E254C21F519F3A007CE371 /* URLRequestSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequestSpecs.swift; sourceTree = "<group>"; };
 		D5E254C31F519F3A007CE371 /* URLSessionSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionSpecs.swift; sourceTree = "<group>"; };
+		D5F2F6E51F538CA000688B57 /* GraphQLCodableSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLCodableSpecs.swift; sourceTree = "<group>"; };
+		D5F2F6E71F5390F600688B57 /* URLSessionRxSpecs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionRxSpecs.swift; sourceTree = "<group>"; };
 		D5F793731F5363EB00CB5FF8 /* XMLCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLCodable.swift; sourceTree = "<group>"; };
 		D5F7937D1F53640300CB5FF8 /* GraphQLCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLCodable.swift; sourceTree = "<group>"; };
 		EF171138E808F7B4E9D5B298 /* Pods-SwiftyURLSessionImp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftyURLSessionImp.release.xcconfig"; path = "Pods/Target Support Files/Pods-SwiftyURLSessionImp/Pods-SwiftyURLSessionImp.release.xcconfig"; sourceTree = "<group>"; };
@@ -333,9 +339,12 @@
 			children = (
 				D5E254BA1F519F3A007CE371 /* Mock */,
 				D5E254B81F519F3A007CE371 /* BodySpecs.swift */,
+				D52FF4121F5388E100C04E26 /* XMLCodableSpecs.swift */,
+				D5F2F6E51F538CA000688B57 /* GraphQLCodableSpecs.swift */,
 				D5E254C11F519F3A007CE371 /* ResourceSpecs.swift */,
 				D5E254C21F519F3A007CE371 /* URLRequestSpecs.swift */,
 				D5E254C31F519F3A007CE371 /* URLSessionSpecs.swift */,
+				D5F2F6E71F5390F600688B57 /* URLSessionRxSpecs.swift */,
 				D5E254B91F519F3A007CE371 /* Info.plist */,
 			);
 			path = SwiftyURLSessionTests;
@@ -836,9 +845,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				D5E254C51F519F4F007CE371 /* ResourceSpecs.swift in Sources */,
+				D5F2F6E81F5390F600688B57 /* URLSessionRxSpecs.swift in Sources */,
 				D5E254C71F519F4F007CE371 /* URLSessionSpecs.swift in Sources */,
 				D5E254C61F519F4F007CE371 /* URLRequestSpecs.swift in Sources */,
+				D5F2F6E61F538CA000688B57 /* GraphQLCodableSpecs.swift in Sources */,
 				D5E254CD1F519F54007CE371 /* RemoteMock.swift in Sources */,
+				D52FF4131F5388E100C04E26 /* XMLCodableSpecs.swift in Sources */,
 				D5E254C41F519F4F007CE371 /* BodySpecs.swift in Sources */,
 				D5E254CC1F519F54007CE371 /* MockData.swift in Sources */,
 			);

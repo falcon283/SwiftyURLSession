@@ -35,7 +35,7 @@ struct TestResource : Resource {
     }
 }
 
-struct TestJSON : Encodable {
+struct TestCodable : Codable {
     var text: String
 }
 

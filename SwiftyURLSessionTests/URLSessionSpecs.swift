@@ -21,124 +21,158 @@ class URLSessionSpecs : QuickSpec {
         
         describe("URLSessionSpecs") {
             
-            context("when request expect response") {
+            describe("DataRequest") {
                 
-                let request = try! Request(for: Mock.self)
-                var mockResult: Mock? = nil
-                
-                beforeEach {
-                    session.dataRequest(request) { result, _ in
-                        mockResult = result
-                    }
-                }
-                
-                it("should have no error") {
-                    expect(mockResult).toEventuallyNot(beNil())
-                    try! expect(mockResult!.url) == Mock.url().absoluteString
-                }
-            }
-            
-            context("when request does not expect response") {
-                
-                let request = try! Request(for: Mock.self, parseData: false)
-                var success: Bool? = nil
-                
-                beforeEach {
-                    session.dataRequest(request) { response, _ in
-                        success = response == nil ? true : false
-                    }
-                }
-                
-                it("should have no error") {
-                    expect(success).toEventually(beTrue())
-                }
-            }
-            
-            context("when request fail") {
-                
-                let request = try! Request(for: MockError.self)
-                var inError: Bool? = nil
-                
-                beforeEach {
-                    session.dataRequest(request) { _, error in
-                        inError = error != nil ? true : false
-                    }
-                }
-                
-                it("should have no error") {
-                    expect(inError).toEventually(beTrue())
-                }
-            }
-        }
-        
-        describe("URLSessionRxSpecs") {
-            
-            context("when object is expected") {
-                
-                let request = try! Request(for: Mock.self)
-                let errorRequest = try! Request(for: MockError.self)
-                
-                context("and request succeed") {
+                context("when expects response") {
                     
-                    var object: Mock? = nil
+                    let request = try! Request(for: Mock.self)
+                    var mockResult: Mock? = nil
                     
                     beforeEach {
-                        _ = session.rxDataRequest(request)
-                            .map { $0.result }
-                            .subscribe(onNext: { object = $0 })
+                        session.dataRequest(request) { result, _ in
+                            mockResult = result
+                        }
                     }
                     
-                    it("should complete with no object") {
-                        expect(object).toEventuallyNot(beNil())
-                    }
-                }
-                
-                context("and request fail") {
-                    
-                    var failure: Bool?
-                    
-                    beforeEach {
-                        _ = session.rxDataRequest(errorRequest)
-                            .subscribe(onError: { _ in failure = true })
-                    }
-                    
-                    it("should complete with no object") {
-                        expect(failure).toEventually(beTrue())
+                    it("should have valid result") {
+                        expect(mockResult).toEventuallyNot(beNil())
+                        try! expect(mockResult!.url) == Mock.url().absoluteString
                     }
                 }
-            }
-            
-            context("when object is not expected") {
                 
-                let request = try! Request(for: Mock.self, parseData: false)
-                let errorRequest = try! Request(for: MockError.self, parseData: false)
-                
-                context("and request succeed") {
+                context("when does not expect response") {
                     
+                    let request = try! Request(for: Mock.self, parseData: false)
                     var success: Bool? = nil
                     
                     beforeEach {
-                        _ = session.rxDataRequest(request)
-                            .map { $0.result }
-                            .subscribe(onNext: { success = $0 == nil ? true : false })
+                        session.dataRequest(request) { response, _ in
+                            success = response == nil ? true : false
+                        }
                     }
                     
-                    it("should complete with no object") {
+                    it("should succeed") {
                         expect(success).toEventually(beTrue())
                     }
                 }
                 
-                context("and request fail") {
+                context("when fails") {
                     
-                    var failure: Bool? = nil
+                    let request = try! Request(for: MockError.self)
+                    var inError: Bool? = nil
                     
                     beforeEach {
-                        _ = session.rxDataRequest(errorRequest)
-                            .subscribe(onError: { _ in failure = true })
+                        session.dataRequest(request) { _, error in
+                            inError = error != nil ? true : false
+                        }
                     }
                     
-                    it("should complete with no object") {
-                        expect(failure).toEventually(beTrue())
+                    it("should finish with error") {
+                        expect(inError).toEventually(beTrue())
+                    }
+                }
+            }
+            
+            describe("UploadRequest") {
+                
+                context("when expects response") {
+                    
+                    let request = try! Request(for: Mock.self)
+                    var mockResult: Mock? = nil
+                    
+                    beforeEach {
+                        session.uploadRequest(request, data: Data()) { result, _ in
+                            mockResult = result
+                        }
+                    }
+                    
+                    it("should have valid result") {
+                        expect(mockResult).toEventuallyNot(beNil())
+                        try! expect(mockResult!.url) == Mock.url().absoluteString
+                    }
+                }
+                
+                context("when does not expect response") {
+                    
+                    let request = try! Request(for: Mock.self, parseData: false)
+                    var success: Bool? = nil
+                    
+                    beforeEach {
+                        session.uploadRequest(request, data: Data()) { response, _ in
+                            success = response == nil ? true : false
+                        }
+                    }
+                    
+                    it("should succeed") {
+                        expect(success).toEventually(beTrue())
+                    }
+                }
+                
+                context("when fails") {
+                    
+                    let request = try! Request(for: MockError.self)
+                    var inError: Bool? = nil
+                    
+                    beforeEach {
+                        session.uploadRequest(request, data: Data()) { _, error in
+                            inError = error != nil ? true : false
+                        }
+                    }
+                    
+                    it("should finish with error") {
+                        expect(inError).toEventually(beTrue())
+                    }
+                }
+            }
+            
+            describe("DownloadRequest") {
+                
+                context("when expects response") {
+                    
+                    let request = try! Request(for: Mock.self)
+                    var mockResult: Mock? = nil
+                    
+                    beforeEach {
+                        session.downloadRequest(request) { result, _ in
+                            mockResult = result
+                        }
+                    }
+                    
+                    it("should have valid result") {
+                        expect(mockResult).toEventuallyNot(beNil())
+                        try! expect(mockResult!.url) == Mock.url().absoluteString
+                    }
+                }
+                
+                context("when does not expect response") {
+                    
+                    let request = try! Request(for: Mock.self, parseData: false)
+                    var success: Bool? = nil
+                    
+                    beforeEach {
+                        session.downloadRequest(request) { response, _ in
+                            success = response == nil ? true : false
+                        }
+                    }
+                    
+                    it("should succeed") {
+                        expect(success).toEventually(beTrue())
+                    }
+                }
+                
+                context("when fails") {
+                    
+                    let request = try! Request(for: MockError.self)
+                    var inError: Bool? = nil
+                    
+                    beforeEach {
+                        session.downloadRequest(request) { _, error in
+                            inError = error != nil ? true : false
+                        }
+                    }
+                    
+                    it("should finish with error") {
+                        expect(inError).toEventually(beTrue())
                     }
                 }
             }

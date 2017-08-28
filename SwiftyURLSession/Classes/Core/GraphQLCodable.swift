@@ -24,7 +24,7 @@ public protocol GraphQLEncoder {
 
 extension GraphQLEncoder {
     func encode(_ object: T) throws -> Data? {
-        return try encode(object, variables: [:], query: .query)
+        return try encode(object, variables: [:])
     }
     
     func encode(_ object: T, variables: [String: String]) throws -> Data? {
@@ -59,7 +59,7 @@ public protocol GraphQLDecoder {
     func decode(_ data: Data) throws -> T
 }
 
-struct GraphQLInLineDencoder<T: Decodable> : GraphQLDecoder {
+struct GraphQLInLineDecoder<T: Decodable> : GraphQLDecoder {
     
     public typealias GraphQLDecoderClosure = ((Data) -> T?)
     

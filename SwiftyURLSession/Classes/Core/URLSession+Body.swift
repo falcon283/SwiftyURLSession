@@ -22,7 +22,7 @@ public extension URLSession {
     @discardableResult
     public func dataRequest<R>(_ request: Request<R>,
                                startNow: Bool = true,
-                               validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                               validator: @escaping (Validator) = URLSession.validateExcept4XX,
                                completion: ((R?, Error?)->())?) -> URLSessionDataTask {
         return dataTaskRequest(request.urlRequest, validator: validator) {
             self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
@@ -33,7 +33,7 @@ public extension URLSession {
     public func uploadRequest<R>(_ request: Request<R>,
                                  data: Data,
                                  startNow: Bool = true,
-                                 validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                 validator: @escaping (Validator) = URLSession.validateExcept4XX,
                                  completion: ((R?, Error?)->())?) -> URLSessionUploadTask {
         
         return uploadTaskRequest(request.urlRequest, data: data, validator: validator) {
@@ -43,9 +43,9 @@ public extension URLSession {
     
     @discardableResult
     public func downloadRequest<R>(_ request: Request<R>,
-                                   resumeData: Data?,
+                                   resumeData: Data? = nil,
                                    startNow: Bool = true,
-                                   validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX,
+                                   validator: @escaping (Validator) = URLSession.validateExcept4XX,
                                    completion: ((R?, Error?)->())?) -> URLSessionDownloadTask {
         
         return downloadTaskRequest(request.urlRequest, resumeData: resumeData, validator: validator) {
@@ -84,7 +84,7 @@ public extension URLSession {
     }
     
     private func dataTaskRequest(_ request: URLRequest,
-                                 validator: @escaping ((StatusCode)->(Bool)),
+                                 validator: @escaping (Validator),
                                  completion: @escaping (Data?, Error?)->()) -> URLSessionDataTask {
         return dataTask(with: request) { (data, response, error) in
             
@@ -109,7 +109,7 @@ public extension URLSession {
     
     private func uploadTaskRequest(_ request: URLRequest,
                                    data: Data,
-                                   validator: @escaping ((StatusCode)->(Bool)),
+                                   validator: @escaping (Validator),
                                    completion: @escaping (Data?, Error?)->()) -> URLSessionUploadTask {
         
         return uploadTask(with: request, from: data) { (data, response, error) in
@@ -135,7 +135,7 @@ public extension URLSession {
     
     private func downloadTaskRequest(_ request: URLRequest,
                                      resumeData: Data? = nil,
-                                     validator: @escaping ((StatusCode)->(Bool)),
+                                     validator: @escaping (Validator),
                                      completion: @escaping (Data?, Error?)->()) -> URLSessionDownloadTask {
         
         func produceData(url: URL?, response: URLResponse?, error: Error?) {
@@ -180,6 +180,8 @@ public extension URLSession {
 
 extension URLSession {
     
+    public typealias Validator = (StatusCode)->(Bool)
+    
     public static func validate200(_ statusCode: StatusCode) -> Bool {
         return statusCode == 200
     }
@@ -204,4 +206,3 @@ extension URLSessionTask {
         return self
     }
 }
-
