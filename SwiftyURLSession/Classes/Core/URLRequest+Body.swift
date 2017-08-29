@@ -8,11 +8,53 @@
 
 import Foundation
 
+/**
+ It's a convenience structure allows you to easily create a URLRequest with
+ convenient values suitable for the operation. It is a generic class that
+ allows to bind a specific type to the request and enforce swift type safety.
+ */
 public struct Request<R: Resource> {
     
+    /// The resource type associated with the request.
     public let resourceType: R.Type
+    
+    var resultType: URLRequest.ContentType?
+    
+    /// The system URLRequest. It's generated using the initialization values and hold here for later use.
     var urlRequest: URLRequest
     
+    /**
+     Designated Initializer.
+     
+     - Parameter resource: The resource type to bind to the request. If the
+     request success and the parseData is required this will be the output object.
+     
+     - Parameter authentication: If your endpoint require authentication you can
+     use the authentication suitable for you. If you use this option the authentication
+     will be stored in the `Authentication` request header. If you need to use a custom
+     header name for the authentication, use the Authentication.encoded variable to
+     obtain the authentication value and pass it alongside with the request header
+     in your custom field. None by default.
+     
+     - Parameter method: the HTTP Method to use for the request. GET by default.
+     
+     - Parameter query: Additional supported parameters you would like to send along
+     with your request. Nil by default.
+     
+     - Parameter headers: The additional header to use for the request. The options
+     overwrite them if they overlap. Nil by default.
+     
+     - Parameter body: The vody to send alon with the request. Nil by default.
+     
+     - Parameter parseData: Determine if the response data should be parsed once
+     received or not. True by default.
+     
+     - Throws: These are the error raised:
+     
+         **RequestError.invalidURL** if the Resource URL is not valid.
+     
+         **RequestError.invalidBody** if the body cannot be serialized.
+     */
     public init(for resource: R.Type,
                 authentication: URLRequest.Authentication = .none,
                 method: URLRequest.HTTPMethod = .get,
@@ -22,26 +64,20 @@ public struct Request<R: Resource> {
                 parseData: Bool = true) throws {
     
         resourceType = resource
+        resultType = parseData ? resource.acceptedContentType : nil
         urlRequest = try URLRequest(url: resource.url(),
                                     authentication: authentication,
                                     method: method,
                                     query: query,
                                     headers: headers,
                                     body: body,
-                                    expecting: parseData ? resource.acceptedContentType : nil)
+                                    expecting: resultType)
     }
 }
 
-public extension URLRequest {
+extension URLRequest {
     
-    public enum HTTPMethod: String {
-        case get
-        case post
-        case put
-        case patch
-        case delete
-    }
-    
+    /// Private variable to easily setup the HTTP Method to the URLRequest.
     private var method: HTTPMethod? {
         get {
             return httpMethod.flatMap { HTTPMethod(rawValue: $0.uppercased()) }
@@ -51,96 +87,30 @@ public extension URLRequest {
         }
     }
     
-    public enum Authentication {
-        case none
-        case basic(username: String, password: String)
-        case oauth2(name: String, secret: String)
-        
-        fileprivate var encoded: String? {
-            switch self {
-            case let .basic(username, password):
-                let utf8 = "\(username):\(password)".data(using: .utf8)
-                let base64 = utf8?.base64EncodedString()
-                return base64.flatMap { "Basic \($0)" }
-            case let .oauth2(name, secret):
-                return "\(name) \(secret)"
-            default:
-                return nil
-            }
-        }
-    }
-    
+    /// Private helper to set the authentication for the standard `Authentication` header.
     private mutating func setAuthentication(_ authentication: Authentication) {
         setHeader(key: "Authentication", value: authentication.encoded)
     }
     
-    public enum ContentType: String {
-        case binary = "application/octet-stream"
-        case graphql = "application/graphql"
-        case jpeg = "application/jpeg"
-        case json = "application/json"
-        case pdf = "application/pdf"
-        case png = "application/png"
-        case text = "application/text"
-        case xml = "application/xml"
-        case zip = "application/zip"
-        // TODO: Multipart
+    /// Private helper to set the `Accept` header for the request.
+    private mutating func setResultType(_ type: ContentType?) {
+        setHeader(key: "Accept", value: type?.description)
     }
     
-    internal var resultType: ContentType? {
-        get {
-            return allHTTPHeaderFields?["Accept"].flatMap { ContentType(rawValue: $0) }
-        }
-        set {
-            setHeader(key: "Accept", value: newValue?.rawValue)
-        }
-    }
-    
-    public enum BodyEncodeError: Error {
-        case invalidBinary
-        case invalidGraphQL
-        case invalidJPEG
-        case invalidJSON
-        case invalidPNG
-        case invalidPDF
-        case invalidString
-        case invalidXML
-        case invalidZIP
-        
-        fileprivate static func from(contentType: ContentType) -> BodyEncodeError {
-            switch contentType {
-            case .binary:
-                return .invalidBinary
-            case .graphql:
-                return .invalidGraphQL
-            case .jpeg:
-                return .invalidJPEG
-            case .json:
-                return .invalidJSON
-            case .png:
-                return .invalidPNG
-            case .pdf:
-                return .invalidPDF
-            case .text:
-                return .invalidString
-            case .xml:
-                return .invalidXML
-            case .zip:
-                return .invalidZIP
-            }
-        }
-    }
-    
+    /// Private helper to set the `httpBody` for the request. It also set the `Content-Type` header in accordance to the body.
     private mutating func setBody(_ body: Body) throws {
         
         guard let data = body.makeData() else {
             throw BodyEncodeError.from(contentType: body.contentType)
         }
         
-        setHeader(key: "Content-Type", value: body.contentType.rawValue)
+        setHeader(key: "Content-Type", value: body.contentType.description)
         httpBody = data
     }
     
+    /** Private helper to set the header for the request. They are imediately applied,
+     it means that options will owerwrite them if they overlap.
+     */
     private mutating func setHeader(key: String, value: String?) {
         
         guard key.count > 0 else {
@@ -154,11 +124,36 @@ public extension URLRequest {
         allHTTPHeaderFields?[key] = value
     }
     
-    public enum RequestError : Error {
-        case invalidURL
-        case invalidBody(encodeError: BodyEncodeError)
-    }
-    
+    /**
+     Designated Initializer.
+     
+     - Parameter url: The url wused for the request.
+     
+     - Parameter authentication: If your endpoint require authentication you can
+     use the authentication suitable for you. If you use this option the authentication
+     will be stored in the `Authentication` request header. If you need to use a custom
+     header name for the authentication, use the Authentication.encoded variable to
+     obtain the authentication value and pass it alongside with the request header
+     in your custom field. None by default.
+     
+     - Parameter method: the HTTP Method to use for the request. GET by default.
+     
+     - Parameter query: Additional supported parameters you would like to send along
+     with your request. Nil by default.
+     
+     - Parameter headers: The additional header to use for the request. The options
+     overwrite them if they overlap. Nil by default.
+     
+     - Parameter body: The vody to send alon with the request. Nil by default.
+     
+     - Parameter expecting: Determine the `Acccept` header. Nil by default.
+     
+     - Throws: These are the error raised:
+     
+         **RequestError.invalidURL** if the Resource URL is not valid.
+     
+         **RequestError.invalidBody** if the body cannot be serialized.
+     */
     fileprivate init(url: URL,
                      authentication: Authentication = .none,
                      method: HTTPMethod = .get,
@@ -191,6 +186,6 @@ public extension URLRequest {
             }
         }
         
-        self.resultType = expecting
+        self.setResultType(expecting)
     }
 }
