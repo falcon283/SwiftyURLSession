@@ -7,7 +7,7 @@ target 'SwiftyURLSessionImp' do
 
   # Pods for SwiftyURLSession
 
-  pod 'RxSwift'
+  pod 'RxSwift', '~> 4.0'
     
   target 'SwiftyURLSessionTests' do
       inherit! :search_paths

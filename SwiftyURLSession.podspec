@@ -109,7 +109,7 @@ Pod::Spec.new do |s|
     # ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
     #
 
-    srxs.dependency "RxSwift", "~> 3.0"
+    srxs.dependency "RxSwift"
 
   end
 
