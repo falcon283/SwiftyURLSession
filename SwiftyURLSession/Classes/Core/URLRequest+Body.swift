@@ -58,6 +58,7 @@ public struct Request<R: Resource> {
     public init(for resource: R.Type,
                 authentication: URLRequest.Authentication = .none,
                 method: URLRequest.HTTPMethod = .get,
+                placeholders: [String]? = nil,
                 query: Query? = nil,
                 headers: [String : String]? = nil,
                 body: Body? = nil,
@@ -65,7 +66,7 @@ public struct Request<R: Resource> {
     
         resourceType = resource
         resultType = parseData ? resource.acceptedContentType : nil
-        urlRequest = try URLRequest(url: resource.url(),
+        urlRequest = try URLRequest(url: resource.url(with: placeholders),
                                     authentication: authentication,
                                     method: method,
                                     query: query,

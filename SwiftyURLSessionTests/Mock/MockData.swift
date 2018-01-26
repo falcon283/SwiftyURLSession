@@ -35,6 +35,32 @@ struct TestResource : Resource {
     }
 }
 
+struct TestDynamicResource : Resource {
+
+    let test: String
+
+    static var location: String {
+        return "http://fake.com"
+    }
+
+    static var path: String {
+        return "resource\(placeholder)"
+    }
+
+    static var acceptedContentType: URLRequest.ContentType {
+        return .json
+    }
+
+    static func decode(data: Data) -> TestDynamicResource? {
+        do {
+            return try JSONDecoder().decode(TestDynamicResource.self, from: data)
+        }
+        catch {
+            return nil
+        }
+    }
+}
+
 struct TestCodable : Codable {
     var text: String
 }

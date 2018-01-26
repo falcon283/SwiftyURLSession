@@ -138,6 +138,18 @@ class URLRequestSpecs : QuickSpec {
                     expect(request.urlRequest.url?.query) == "test1=true&test2=Test&test3=5"
                 }
             }
+
+            context("when using placeholder") {
+
+                context("properly") {
+
+                    let request = try! Request(for: TestDynamicResource.self, placeholders:["1234"])
+
+                    it("url should contain placeholder") {
+                        expect(request.urlRequest.url?.absoluteString).to(contain("1234"))
+                    }
+                }
+            }
             
             context("when body") {
                 

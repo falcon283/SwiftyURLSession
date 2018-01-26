@@ -45,14 +45,19 @@ public protocol Resource : Decodable {
 }
 
 extension Resource {
-    
+
+    /// A placeholder to build a dynamic path
+    public static var placeholder: String { return "{p}" }
+
     /**
      The full URL for the resource.
      
      - Returns: The URL where the resource can be retrieved.
      */
-    internal static func url() throws -> URL {
-        guard let url = URL(string: location)?.appendingPathComponent(path) else {
+    internal static func url(with placeholders: [String]? = nil) throws -> URL {
+
+        let dynamicPath = placeholders?.reduce(path) { $0.replacingOccurrences(of: placeholder, with: $1) } ?? path
+        guard let url = URL(string: location)?.appendingPathComponent(dynamicPath) else {
             throw URLRequest.RequestError.invalidURL
         }
         return url
