@@ -19,6 +19,12 @@ public protocol Query {
     var parameters: [String : String] { get }
 }
 
+extension Dictionary: Query {
+    public var parameters: [String: String] {
+        return self as? [String: String] ?? [:]
+    }
+}
+
 /**
  A Resource object conform to to Decodable protocol in order to allow
  its deserialization when received from the network request.
