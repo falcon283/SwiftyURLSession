@@ -29,7 +29,7 @@ extension Dictionary: Query {
  A Resource object conform to to Decodable protocol in order to allow
  its deserialization when received from the network request.
  */
-public protocol Resource : Decodable {
+public protocol Resource {
     
     /// The location of the resource as base url.
     static var location: String { get }
@@ -47,7 +47,7 @@ public protocol Resource : Decodable {
      
      - Returns: The deserialized Resource.
      */
-    static func decode(data: Data) -> Self?
+    static func decode<O: Decodable>(data: Data) -> O?
 }
 
 extension Resource {

@@ -13,8 +13,11 @@ import Foundation
  convenient values suitable for the operation. It is a generic class that
  allows to bind a specific type to the request and enforce swift type safety.
  */
-public struct Request<R: Resource> {
-    
+public struct Request<R: Resource, D: Decodable> {
+
+    /// The decoded type associated with the request.
+    public let decodedType: D.Type
+
     /// The resource type associated with the request.
     public let resourceType: R.Type
     
@@ -56,6 +59,7 @@ public struct Request<R: Resource> {
          **RequestError.invalidBody** if the body cannot be serialized.
      */
     public init(for resource: R.Type,
+                object: D.Type,
                 authentication: URLRequest.Authentication = .none,
                 method: URLRequest.HTTPMethod = .get,
                 placeholders: [String]? = nil,
@@ -65,6 +69,7 @@ public struct Request<R: Resource> {
                 parseData: Bool = true) throws {
     
         resourceType = resource
+        decodedType = object
         resultType = parseData ? resource.acceptedContentType : nil
         urlRequest = try URLRequest(url: resource.url(with: placeholders),
                                     authentication: authentication,

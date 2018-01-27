@@ -25,8 +25,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is expected") {
                     
-                    let request = try! Request(for: Mock.self)
-                    let errorRequest = try! Request(for: MockError.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
+                    let errorRequest = try! Request(for: MockError.self, object: MockError.self)
                     
                     context("and request succeed") {
                         
@@ -60,8 +60,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is not expected") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
-                    let errorRequest = try! Request(for: MockError.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: TestResource.self, parseData: false)
+                    let errorRequest = try! Request(for: MockError.self, object: TestResource.self, parseData: false)
                     
                     context("and request succeed") {
                         
@@ -98,8 +98,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is expected") {
                     
-                    let request = try! Request(for: Mock.self)
-                    let errorRequest = try! Request(for: MockError.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
+                    let errorRequest = try! Request(for: MockError.self, object: MockError.self)
                     
                     context("and request succeed") {
                         
@@ -133,8 +133,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is not expected") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
-                    let errorRequest = try! Request(for: MockError.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: Mock.self, parseData: false)
+                    let errorRequest = try! Request(for: MockError.self, object: MockError.self, parseData: false)
                     
                     context("and request succeed") {
                         
@@ -171,8 +171,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is expected") {
                     
-                    let request = try! Request(for: Mock.self)
-                    let errorRequest = try! Request(for: MockError.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
+                    let errorRequest = try! Request(for: MockError.self, object: MockError.self)
                     
                     context("and request succeed") {
                         
@@ -206,8 +206,8 @@ class URLSessionRxSpecs : QuickSpec {
                 
                 context("when object is not expected") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
-                    let errorRequest = try! Request(for: MockError.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: Mock.self, parseData: false)
+                    let errorRequest = try! Request(for: MockError.self, object: MockError.self, parseData: false)
                     
                     context("and request succeed") {
                         

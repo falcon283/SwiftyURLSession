@@ -11,7 +11,7 @@ import RxSwift
 
 public protocol Task {
     associatedtype T: URLSessionTask
-    associatedtype R: Resource
+    associatedtype R
     
     var task: T { get }
     var result: R? { get }
@@ -19,11 +19,11 @@ public protocol Task {
 
 extension URLSession {
     
-    public func rxDataRequest<R>(_ request: Request<R>,
-                                 startNow: Bool = true,
-                                 validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<DataTask<R>> {
+    public func rxDataRequest<R, D>(_ request: Request<R, D>,
+                                    startNow: Bool = true,
+                                    validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<DataTask<D>> {
         
-        let observable = Observable<DataTask<R>>.create({ observer -> Disposable in
+        let observable = Observable<DataTask<D>>.create({ observer -> Disposable in
             
             var task: URLSessionDataTask!
 
@@ -46,12 +46,12 @@ extension URLSession {
         return observable.runWhileInBackgroundIfSupported(name: "\(#function)")
     }
     
-    public func rxUploadRequest<R>(_ request: Request<R>,
-                                   data: Data,
-                                   startNow: Bool = true,
-                                   validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<UploadTask<R>> {
+    public func rxUploadRequest<R, D>(_ request: Request<R, D>,
+                                      data: Data,
+                                      startNow: Bool = true,
+                                      validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<UploadTask<D>> {
         
-        let observable = Observable<UploadTask<R>>.create({ observer -> Disposable in
+        let observable = Observable<UploadTask<D>>.create({ observer -> Disposable in
             
             var task: URLSessionUploadTask!
 
@@ -74,12 +74,12 @@ extension URLSession {
         return observable.runWhileInBackgroundIfSupported(name: "\(#function)")
     }
     
-    public func rxDownloadRequest<R>(_ request: Request<R>,
-                                     resumeData: Data? = nil,
-                                     startNow: Bool = true,
-                                     validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<DownloadTask<R>> {
+    public func rxDownloadRequest<R, D>(_ request: Request<R, D>,
+                                        resumeData: Data? = nil,
+                                        startNow: Bool = true,
+                                        validator: @escaping ((StatusCode)->(Bool)) = URLSession.validateExcept4XX) -> Observable<DownloadTask<D>> {
         
-        let observable = Observable<DownloadTask<R>>.create({ observer -> Disposable in
+        let observable = Observable<DownloadTask<D>>.create({ observer -> Disposable in
             
             var task: URLSessionDownloadTask!
             
@@ -104,34 +104,34 @@ extension URLSession {
     }
 }
 
-public struct DataTask<T: Resource> : Task {
+public struct DataTask<D> : Task {
     
     public let task: URLSessionDataTask
-    public let result: T?
+    public let result: D?
     
-    public init(_ task: URLSessionDataTask, result: T? = nil) {
+    public init(_ task: URLSessionDataTask, result: D? = nil) {
         self.task = task
         self.result = result
     }
 }
 
-public struct UploadTask<T: Resource> : Task {
+public struct UploadTask<D> : Task {
     
     public let task: URLSessionUploadTask
-    public let result: T?
+    public let result: D?
     
-    public init(_ task: URLSessionUploadTask, result: T? = nil) {
+    public init(_ task: URLSessionUploadTask, result: D? = nil) {
         self.task = task
         self.result = result
     }
 }
 
-public struct DownloadTask<T: Resource> : Task {
+public struct DownloadTask<D> : Task {
     
     public let task: URLSessionDownloadTask
-    public let result: T?
+    public let result: D?
     
-    public init(_ task: URLSessionDownloadTask, result: T? = nil) {
+    public init(_ task: URLSessionDownloadTask, result: D? = nil) {
         self.task = task
         self.result = result
     }

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyURLSessionImp
 
-struct TestResource : Resource {
+struct TestResource : Resource, Decodable {
     
     let test: String
     
@@ -24,10 +24,10 @@ struct TestResource : Resource {
     static var acceptedContentType: URLRequest.ContentType {
         return .json
     }
-    
-    static func decode(data: Data) -> TestResource? {
+
+    static func decode<O>(data: Data) -> O? where O : Decodable {
         do {
-            return try JSONDecoder().decode(TestResource.self, from: data)
+            return try JSONDecoder().decode(O.self, from: data)
         }
         catch {
             return nil
@@ -35,7 +35,7 @@ struct TestResource : Resource {
     }
 }
 
-struct TestDynamicResource : Resource {
+struct TestDynamicResource : Resource, Decodable {
 
     let test: String
 
@@ -51,9 +51,9 @@ struct TestDynamicResource : Resource {
         return .json
     }
 
-    static func decode(data: Data) -> TestDynamicResource? {
+    static func decode<O>(data: Data) -> O? where O : Decodable {
         do {
-            return try JSONDecoder().decode(TestDynamicResource.self, from: data)
+            return try JSONDecoder().decode(O.self, from: data)
         }
         catch {
             return nil

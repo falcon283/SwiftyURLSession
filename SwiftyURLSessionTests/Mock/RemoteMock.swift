@@ -36,9 +36,9 @@ extension Mock : Resource {
         return .json
     }
     
-    static func decode(data: Data) -> Mock? {
+    static func decode<O>(data: Data) -> O? where O : Decodable {
         do {
-            return try JSONDecoder().decode(Mock.self, from: data)
+            return try JSONDecoder().decode(O.self, from: data)
         }
         catch {
             return nil
@@ -60,7 +60,7 @@ extension MockError : Resource {
         return .json
     }
     
-    static func decode(data: Data) -> MockError? {
+    static func decode<O>(data: Data) -> O? where O : Decodable {
         return nil
     }
 }

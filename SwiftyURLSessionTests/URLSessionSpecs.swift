@@ -25,7 +25,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when expects response") {
                     
-                    let request = try! Request(for: Mock.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
                     var mockResult: Mock? = nil
                     
                     beforeEach {
@@ -42,7 +42,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when does not expect response") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: Mock.self, parseData: false)
                     var success: Bool? = nil
                     
                     beforeEach {
@@ -58,7 +58,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when fails") {
                     
-                    let request = try! Request(for: MockError.self)
+                    let request = try! Request(for: MockError.self, object: MockError.self)
                     var inError: Bool? = nil
                     
                     beforeEach {
@@ -77,7 +77,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when expects response") {
                     
-                    let request = try! Request(for: Mock.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
                     var mockResult: Mock? = nil
                     
                     beforeEach {
@@ -94,7 +94,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when does not expect response") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: Mock.self, parseData: false)
                     var success: Bool? = nil
                     
                     beforeEach {
@@ -110,7 +110,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when fails") {
                     
-                    let request = try! Request(for: MockError.self)
+                    let request = try! Request(for: MockError.self, object: MockError.self)
                     var inError: Bool? = nil
                     
                     beforeEach {
@@ -129,7 +129,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when expects response") {
                     
-                    let request = try! Request(for: Mock.self)
+                    let request = try! Request(for: Mock.self, object: Mock.self)
                     var mockResult: Mock? = nil
                     
                     beforeEach {
@@ -146,7 +146,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when does not expect response") {
                     
-                    let request = try! Request(for: Mock.self, parseData: false)
+                    let request = try! Request(for: Mock.self, object: Mock.self, parseData: false)
                     var success: Bool? = nil
                     
                     beforeEach {
@@ -162,7 +162,7 @@ class URLSessionSpecs : QuickSpec {
                 
                 context("when fails") {
                     
-                    let request = try! Request(for: MockError.self)
+                    let request = try! Request(for: MockError.self, object: MockError.self)
                     var inError: Bool? = nil
                     
                     beforeEach {

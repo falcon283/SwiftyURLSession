@@ -44,10 +44,10 @@ public extension URLSession {
     - Returns: The dataTask to control the network activity.
     */
     @discardableResult
-    public func dataRequest<R>(_ request: Request<R>,
-                               startNow: Bool = true,
-                               validator: @escaping (Validator) = URLSession.validateExcept4XX,
-                               completion: ((R?, Error?)->())?) -> URLSessionDataTask {
+    public func dataRequest<R, D>(_ request: Request<R, D>,
+                                  startNow: Bool = true,
+                                  validator: @escaping (Validator) = URLSession.validateExcept4XX,
+                                  completion: ((D?, Error?)->())?) -> URLSessionDataTask {
         return dataTaskRequest(request.urlRequest, validator: validator) {
             self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
         }.resumed(startNow)
@@ -68,11 +68,11 @@ public extension URLSession {
      - Returns: The dataTask to control the network activity.
      */
     @discardableResult
-    public func uploadRequest<R>(_ request: Request<R>,
-                                 data: Data,
-                                 startNow: Bool = true,
-                                 validator: @escaping (Validator) = URLSession.validateExcept4XX,
-                                 completion: ((R?, Error?)->())?) -> URLSessionUploadTask {
+    public func uploadRequest<R, D>(_ request: Request<R, D>,
+                                    data: Data,
+                                    startNow: Bool = true,
+                                    validator: @escaping (Validator) = URLSession.validateExcept4XX,
+                                    completion: ((D?, Error?)->())?) -> URLSessionUploadTask {
         
         return uploadTaskRequest(request.urlRequest, data: data, validator: validator) {
             self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
@@ -94,11 +94,11 @@ public extension URLSession {
      - Returns: The dataTask to control the network activity.
      */
     @discardableResult
-    public func downloadRequest<R>(_ request: Request<R>,
-                                   resumeData: Data? = nil,
-                                   startNow: Bool = true,
-                                   validator: @escaping (Validator) = URLSession.validateExcept4XX,
-                                   completion: ((R?, Error?)->())?) -> URLSessionDownloadTask {
+    public func downloadRequest<R, D>(_ request: Request<R, D>,
+                                      resumeData: Data? = nil,
+                                      startNow: Bool = true,
+                                      validator: @escaping (Validator) = URLSession.validateExcept4XX,
+                                      completion: ((D?, Error?)->())?) -> URLSessionDownloadTask {
         
         return downloadTaskRequest(request.urlRequest, resumeData: resumeData, validator: validator) {
             self.finalizeTask(for: request, with: $0, error: $1, completion: completion)
@@ -113,7 +113,7 @@ public extension URLSession {
      - Parameter error: The error received for the task if any.
      - Parameter completion: The completion to execute.
      */
-    private func finalizeTask<R>(for request: Request<R>, with data: Data?, error: Error?, completion: ((R?, Error?)->())?) {
+    private func finalizeTask<R, D>(for request: Request<R, D>, with data: Data?, error: Error?, completion: ((D?, Error?)->())?) {
         // Skip Processing if not requested
         guard let _ = completion else {
             return
@@ -131,7 +131,7 @@ public extension URLSession {
                 return
             }
             
-            guard let decoded = request.resourceType.decode(data: data) else {
+            guard let decoded: D = request.resourceType.decode(data: data) else {
                 completion?(nil, HTTPRequestError.decodeError(rawData: data))
                 return
             }

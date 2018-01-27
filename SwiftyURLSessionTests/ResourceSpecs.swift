@@ -26,7 +26,7 @@ class ResourceSpecs: QuickSpec {
             
             context("when getting wrong url") {
                 
-                struct WrongResource : Resource {
+                struct WrongResource : Resource, Decodable {
                     static var location: String {
                         return ""
                     }
@@ -39,7 +39,7 @@ class ResourceSpecs: QuickSpec {
                         return .json
                     }
                     
-                    static func decode(data: Data) -> WrongResource? {
+                    static func decode<O>(data: Data) -> O? where O : Decodable {
                         return nil
                     }
                 }
@@ -54,7 +54,7 @@ class ResourceSpecs: QuickSpec {
                 let data = "{ \"test\": \"value\" }".data(using: .utf8)!
                 
                 it("should have valid result") {
-                    let result = TestResource.decode(data: data)!
+                    let result: TestResource = TestResource.decode(data: data)!
                     expect(result.test) == "value"
                 }
             }
@@ -62,7 +62,7 @@ class ResourceSpecs: QuickSpec {
             context("when decoding fail") {
                 
                 it("should have invalid result") {
-                    let result = TestResource.decode(data: Data())
+                    let result: TestResource? = TestResource.decode(data: Data())
                     expect(result).to(beNil())
                 }
             }
